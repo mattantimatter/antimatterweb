@@ -7,6 +7,7 @@ import NavLinksBg from "./ui/NavLinksBg";
 import { useLoading } from "@/store";
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
+import HamMenu from "./ui/HamMenu";
 
 const NavData = [
   { href: "/", text: "Home" },
@@ -63,6 +64,7 @@ const NavBar = () => {
             </ul>
           </nav>
           <NavButton className="hidden md:block" />
+          <HamMenu navData={NavData} />
         </div>
       </div>
       <NavLinksBg />

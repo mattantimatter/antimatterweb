@@ -13,13 +13,13 @@ const HeroComponent = () => {
   const [fontSize, setFontSize] = useState(() => {
     if (typeof window === "undefined") return 30;
     if (window.innerWidth >= 1024) return 30;
-    return 20;
+    return 22;
   });
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) setFontSize(30);
-      else setFontSize(20);
+      else setFontSize(22);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
