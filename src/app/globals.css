@@ -28,6 +28,7 @@ html {
   --text-title: 2.5rem;
   --breakpoint-wide: 2060px;
   --breakpoint-xs: 350px;
+  --breakpoint-mobile: 512px;
 }
 
 body {

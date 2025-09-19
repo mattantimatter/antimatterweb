@@ -59,14 +59,21 @@ export function setupInteractions(
   const ctx = gsap.context(() => {
     let media = gsap.matchMedia();
     media.add(
-      { isMobile: "(max-width: 1536px)", isDesktop: "(min-width: 1536px)" },
+      {
+        isMobile: "(min-width: 1024px)",
+        isDesktop: "(min-width: 1536px)",
+        isScreen1: "(min-width: 1350px)",
+      },
       (context) => {
-        let { isMobile, isDesktop } = context.conditions as {
-          isMobile: boolean;
-          isDesktop: boolean;
-        };
+        let { isMobile, isDesktop, isScreen1 } = context.conditions!;
 
-        const xValue = isDesktop ? "-55%" : "-45%";
+        const xValue = isDesktop
+          ? "-55%"
+          : isScreen1
+          ? "-60%"
+          : isMobile
+          ? "-50%"
+          : "0";
 
         const timeline = gsap.timeline({
           scrollTrigger: {

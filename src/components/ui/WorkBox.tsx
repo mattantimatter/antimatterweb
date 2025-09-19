@@ -29,11 +29,13 @@ const WorkBox = ({
       {...props}
     >
       <div className={`flex justify-between relative `}>
-        <div className="flex gap-10">
+        <div className="flex gap-4 sm:gap-10">
           <div className="text-lg">{number}</div>
           <h3 className="text-lg font-semibold">{title}</h3>
         </div>
-        <div className={`text-foreground/40 duration-300 ${styles.work}`}>
+        <div
+          className={`text-foreground/40 text-sm sm:text-base max-w-20 sm:max-w-max duration-300 ${styles.work}`}
+        >
           {workType}
         </div>
         <GoArrowUpRight

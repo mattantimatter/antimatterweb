@@ -6,9 +6,9 @@ const WorkSection = () => {
   return (
     <div className="relative">
       <div className="flex flex-col gap-24 ">
-        <div className="flex justify-between">
+        <div className="flex flex-col md:flex-row justify-between gap-5">
           <Title>Case studies</Title>
-          <p className="text-right font-light">
+          <p className="text-left md:text-right font-light">
             Proven results, measurable impact—explore <br /> the transformations
             we&apos;ve delivered.
           </p>

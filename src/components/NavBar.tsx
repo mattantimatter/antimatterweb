@@ -48,20 +48,21 @@ const NavBar = () => {
               alt="Antimatter AI Logo"
               priority
               loading="eager"
+              className="w-32 lg:w-38 h-auto"
             />
           </Link>
-          <nav>
+          <nav className="hidden md:block">
             <ul className="flex text-sm" id="nav-links">
               {NavData.map((nav) => (
                 <li key={nav.text}>
-                  <Link href={nav.href} className="px-7 py-1.5 flex">
+                  <Link href={nav.href} className="px-4 lg:px-7 py-1.5 flex">
                     {nav.text}
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
-          <NavButton />
+          <NavButton className="hidden md:block" />
         </div>
       </div>
       <NavLinksBg />

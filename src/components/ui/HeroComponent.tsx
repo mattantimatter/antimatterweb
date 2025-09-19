@@ -2,7 +2,6 @@
 import { animate, AnimatePresence, motion } from "motion/react";
 import Button from "./Button";
 import { useLoading } from "@/store";
-import Image from "next/image";
 import Counter from "./bits/Counter";
 import { useEffect, useState } from "react";
 
@@ -10,6 +9,21 @@ const HeroComponent = () => {
   const finished = useLoading((s) => s.finished);
   const [projects, setProjects] = useState(0);
   const [satisfaction, setSatisfaction] = useState(0);
+
+  const [fontSize, setFontSize] = useState(() => {
+    if (typeof window === "undefined") return 30;
+    if (window.innerWidth >= 1024) return 30;
+    return 20;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) setFontSize(30);
+      else setFontSize(20);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (finished) {
@@ -39,18 +53,23 @@ const HeroComponent = () => {
           className="flex flex-col w-main m-auto  pt-10 pb-14 h-full relative z-10"
         >
           <div className="grow flex justify-center items-center ">
-            <h1 className="text-7xl font-light" id="hero-title">
+            <h1
+              className="text-3xl/[1.7rem] sm:text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl font-light sm-text-left text-center 
+              sm:w-[500px] md:w-[660px] xl:w-[830px] 2xl:w-[1000px]
+              "
+              id="hero-title"
+            >
               <motion.div
                 id="title1"
                 initial={{ x: 150 }}
                 animate={{ x: 0 }}
                 transition={{ duration: 2, ease: "anticipate" }}
-                className="pr-68"
+                className="flex justify-center sm:justify-start"
               >
-                Building <span className="italic font-bold">Digital</span>
+                Building <span className="italic font-bold pr-2">Digital</span>
               </motion.div>
               <motion.div
-                className="text-right mt-2 pl-68"
+                className="text-right mt-0 flex justify-center sm:justify-end"
                 id="title2"
                 initial={{ x: -150 }}
                 animate={{ x: 0 }}
@@ -66,10 +85,10 @@ const HeroComponent = () => {
             transition={{ duration: 1.8, ease: "anticipate" }}
           >
             <div
-              className="flex justify-between w-full items-end"
+              className="flex flex-col md:flex-row justify-between w-full gap-10 md:gap-0 items-center md:items-end"
               id="hero-stats"
             >
-              <div className="flex w-80 flex-col gap-10">
+              <div className="flex max-w-xs lg:max-w-lg flex-col gap-10 md:items-start items-center text-center md:text-left">
                 <p>
                   Transforming ideas into digital reality with AI, Web3, and
                   Cutting-Edge Technology.
@@ -78,15 +97,15 @@ const HeroComponent = () => {
                   <Button>Start Your Project</Button>
                 </div>
               </div>
-              <div className="flex text-sm gap-16">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-3xl font-semibold">
+              <div className="flex text-sm mobile:gap-10 lg:gap-16 sm:justify-center md:justify-end justify-between w-full">
+                <div className="flex flex-col sm:flex-row items-center gap-2">
+                  <h3 className="text-2xl lg:text-3xl flex items-center font-semibold text-nowrap -ml-5 sm:-ml-0">
                     <Counter
                       value={projects}
                       places={[10, 1]}
                       gap={2}
-                      fontSize={30}
-                      fontWeight={500}
+                      fontSize={fontSize}
+                      fontWeight={600}
                       gradientFrom="transparent"
                     />
                     <span className="text-tertiary">+</span>
@@ -95,13 +114,13 @@ const HeroComponent = () => {
                     Projects <br /> Delivered
                   </h3>
                 </div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-3xl font-semibold">
+                <div className="flex flex-col sm:flex-row items-center gap-2">
+                  <h3 className="text-2xl lg:text-3xl flex items-center font-semibold text-nowrap -ml-5 sm:-ml-0">
                     <Counter
                       value={satisfaction}
                       gap={2}
-                      fontSize={30}
-                      fontWeight={500}
+                      fontSize={fontSize}
+                      fontWeight={600}
                       gradientFrom="transparent"
                     />
                     <span className="text-tertiary">%</span>
@@ -112,8 +131,8 @@ const HeroComponent = () => {
                     Satisfaction
                   </h3>
                 </div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-3xl font-semibold">
+                <div className="flex flex-col sm:flex-row items-center gap-2">
+                  <h3 className="text-2xl lg:text-3xl font-semibold text-nowrap">
                     24<span className="text-tertiary">/</span>7
                   </h3>
                   <h3>

@@ -39,7 +39,7 @@ const CaseStudy = ({
       <motion.div
         initial={{ opacity: 0, y: 200 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
+        transition={{ duration: 1, delay: 0.2 }}
         className="flex flex-col gap-20 lg:gap-30"
       >
         <div className="text-center">
@@ -60,7 +60,7 @@ const CaseStudy = ({
         <motion.div
           initial={{ y: 200 }}
           animate={{ y: 0 }}
-          transition={{ duration: 1, delay: 0.1 }}
+          transition={{ duration: 1, delay: 0.3 }}
         >
           <Image
             src={heroImage}

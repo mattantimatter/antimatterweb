@@ -23,7 +23,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.className} antialiased overx`}>
         <NavBar />
-        <Providers>{children}</Providers>
+        <div className="overflow-x-hidden relative">
+          <Providers>{children}</Providers>
+        </div>
         <Footer />
       </body>
     </html>

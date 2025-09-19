@@ -36,7 +36,7 @@ const ServiceCard = (props: ServiceCardProps) => {
   return (
     <div className="service-card">
       <div
-        className={`p-[1px] grow shrink-0 relative border border-zinc-700 overflow-hidden rounded-3xl w-[340px] h-[380px] 2xl:w-[420px] 2xl:h-[480px] ${bgcolor} duration-300 ${
+        className={`p-[1px] grow shrink-0 relative border border-zinc-700 overflow-hidden rounded-3xl w-[300px] h-[350px] sm:w-[340px] sm:h-[380px] 2xl:w-[420px] 2xl:h-[480px] ${bgcolor} duration-300 ${
           props.active ? "scale-100" : "scale-90"
         } `}
       >

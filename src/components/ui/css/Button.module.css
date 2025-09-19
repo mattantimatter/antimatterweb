@@ -36,3 +36,10 @@
 .button:hover::before {
   opacity: 1;
 }
+
+@media screen and (max-width: 1024px) {
+  .button {
+    padding: 8px 30px;
+    font-size: 16px;
+  }
+}

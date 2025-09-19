@@ -1,3 +1,4 @@
+import Particels from "./Particels";
 import HeroComponent from "./ui/HeroComponent";
 
 const HeroSection = () => {
@@ -6,7 +7,10 @@ const HeroSection = () => {
       <h2 className="absolute top-30 left-1/2 -translate-x-1/2 text-[14vw] font-bold text-nowrap text-center opacity-5">
         ANTIMATTER AI
       </h2>
-      <HeroComponent />
+      <Particels />
+      <div className="relative z-20 h-full">
+        <HeroComponent />
+      </div>
     </div>
   );
 };

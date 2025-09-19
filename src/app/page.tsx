@@ -15,8 +15,7 @@ export default function Home() {
     <>
       <HeroSection />
       <LightRays />
-      <Particels />
-      <MainLayout className="mt-60 overflow-x-hidden">
+      <MainLayout className="mt-40 sm:mt-60 overflow-x-hidden">
         <ServiceSection />
         <WorkSection />
         <Testimonial />
