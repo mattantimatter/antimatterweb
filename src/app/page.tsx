@@ -1,7 +1,6 @@
 import ClientsSection from "@/components/ClientsSection";
 import CTASection from "@/components/CTASection";
 import HeroSection from "@/components/HeroSection";
-import Particels from "@/components/Particels";
 import ServiceSection from "@/components/ServiceSection";
 import Testimonial from "@/components/Testimonial";
 import LightRays from "@/components/ui/LightRays";

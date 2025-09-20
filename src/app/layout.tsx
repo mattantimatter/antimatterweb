@@ -21,9 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.className} antialiased overx`}>
+      <body className={`${geistSans.className} antialiased overflow-x-hidden`}>
         <NavBar />
-        <div className="overflow-x-hidden relative">
+        <div className="relative">
           <Providers>{children}</Providers>
         </div>
         <Footer />

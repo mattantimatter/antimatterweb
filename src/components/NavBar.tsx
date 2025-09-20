@@ -14,7 +14,7 @@ const NavData = [
   { href: "/work", text: "Work" },
   { href: "/", text: "Services" },
   // { href: "/", text: "Company" },
-  { href: "/", text: "Contact" },
+  { href: "/contact", text: "Contact" },
   // { href: "/", text: "Blog" },
 ];
 

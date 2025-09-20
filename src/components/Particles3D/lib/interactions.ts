@@ -57,7 +57,7 @@ export function setupInteractions(
   // ---- GSAP timelines with ScrollTriggers
 
   const ctx = gsap.context(() => {
-    let media = gsap.matchMedia();
+    const media = gsap.matchMedia();
     media.add(
       {
         isMobile: "(min-width: 1024px)",
@@ -65,7 +65,7 @@ export function setupInteractions(
         isScreen1: "(min-width: 1350px)",
       },
       (context) => {
-        let { isMobile, isDesktop, isScreen1 } = context.conditions!;
+        const { isMobile, isDesktop, isScreen1 } = context.conditions!;
 
         const xValue = isDesktop
           ? "-55%"

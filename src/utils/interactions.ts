@@ -24,11 +24,12 @@ const Interactions = () => {
         },
       });
       timeline
-        .to("#hero-title", { duration: 1, ease: "power1.out", y: -200 }, 0)
+        .to("#hero-title", { duration: 1, ease: "power1.out", y: -150 }, 0)
+        .to("#hero-company", { duration: 1, ease: "power1.out", y: 200 }, 0)
         .to(
           "#hero-stats",
           {
-            duration: 0.3,
+            duration: 0.6,
             delay: 0.05,
             ease: "power1.inOut",
             opacity: 0,

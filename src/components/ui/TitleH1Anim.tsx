@@ -1,3 +1,4 @@
+"use client";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { HTMLMotionProps, motion } from "motion/react";

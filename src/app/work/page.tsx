@@ -32,12 +32,12 @@ const WorkData = [
   },
 ];
 
-const Page = () => {
+const WorkPage = () => {
   return (
-    <MainLayout className="pt-40 overflow-x-hidden">
+    <MainLayout className="pt-40">
       <WorkComponent WorkData={WorkData} />
     </MainLayout>
   );
 };
 
-export default Page;
+export default WorkPage;

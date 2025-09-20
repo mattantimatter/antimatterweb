@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GoArrowUpRight } from "react-icons/go";
+import AtlantaClock from "./ui/AtlantaClock";
 
 const Footer = () => {
   return (
@@ -17,6 +18,15 @@ const Footer = () => {
               >
                 Linkedin <GoArrowUpRight className={`size-4`} />
               </a>
+            </div>
+            <div className="flex flex-col mt-10">
+              <div className="flex flex-col lg:flex-row gap-0 lg:gap-4">
+                <p>Based in Atlanta, GA</p>
+                <p className="opacity-50">Serving clients globally</p>
+              </div>
+              <h3 className="font-semibold text-5xl sm:text-6xl lg:text-8xl mt-2">
+                <AtlantaClock />
+              </h3>
             </div>
           </div>
           <div className="flex flex-col xs:flex-row justify-between sm:justify-normal gap-10 xs:gap-5 sm:gap-50 md:gap-20 lg:gap-30">
@@ -42,11 +52,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row mt-30 gap-10 md:gap-5 justify-between font-light">
-          <div className="flex gap-1 md:gap-5 flex-col md:flex-row">
-            <p>Based in Atlanta, GA</p>
-            <p className="opacity-50">Serving clients globally</p>
-          </div>
+        <div className="flex flex-col md:flex-row mt-20 gap-10 md:gap-5 justify-between font-light">
           <p className=" text-foreground/50 text-center">
             Antimatter AI, © 2024. All rights reserved.
           </p>

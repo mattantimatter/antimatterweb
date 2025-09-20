@@ -2,7 +2,7 @@
 import Link from "next/link";
 import HamButton from "./HamButton";
 import NavButton from "./NavButton";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, Variants } from "motion/react";
 import { useState } from "react";
 
 interface NavData {
@@ -14,8 +14,29 @@ interface Props {
   navData: NavData[];
 }
 
+const listVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 50 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeInOut" },
+  },
+};
+
 const HamMenu = ({ navData }: Props) => {
   const [active, setActive] = useState(false);
+
   return (
     <>
       <HamButton active={active} onClick={() => setActive(!active)} />
@@ -28,7 +49,8 @@ const HamMenu = ({ navData }: Props) => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               className="bg-black/70 absolute top-0 left-0 size-full"
-            ></motion.div>
+              onClick={() => setActive(!active)}
+            />
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -45,21 +67,30 @@ const HamMenu = ({ navData }: Props) => {
                 </div>
                 <div className="relative w-full">
                   <nav>
-                    <ul className="flex flex-col gap-2 text-4xl font-semibold">
+                    <motion.ul
+                      className="flex flex-col gap-2 text-4xl font-semibold"
+                      variants={listVariants}
+                      initial="hidden"
+                      animate="show"
+                    >
                       {navData.map((nav, index) => (
-                        <li key={nav.text} className="relative pl-10">
+                        <motion.li
+                          key={nav.text}
+                          className="relative pl-10"
+                          variants={itemVariants}
+                        >
                           <Link
                             href={nav.href}
-                            onClick={() => setActive(!active)}
+                            onClick={() => setActive(false)}
                           >
                             <span className="opacity-30 absolute left-0 bottom-0 text-2xl">
                               0{index + 1}
                             </span>
                             {nav.text}
                           </Link>
-                        </li>
+                        </motion.li>
                       ))}
-                    </ul>
+                    </motion.ul>
                   </nav>
                   <div className="top-full absolute left-0 mt-20 w-full">
                     <NavButton />

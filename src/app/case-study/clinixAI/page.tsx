@@ -1,38 +1,34 @@
-import MainLayout from "@/components/ui/MainLayout";
 import CaseStudy from "../component/CaseStudy";
 import Reveal from "@/components/ui/Reveal";
-import { div } from "motion/react-client";
 import Image from "next/image";
 
-const page = () => {
+const CaseStudyPage = () => {
   return (
-    <MainLayout className="pt-40 overflow-x-hidden">
-      <CaseStudy
-        title="Clinix AI"
-        subtitle="The Future of Healthcare Documentation"
-        heroImage="/images/CaseStudies/clinix/clinixai-1.jpg"
-        summary="We co-founded and built Clinix AI as an “AI Operating System for healthcare.” The project focused on ambient clinical note generation, ICD/CPT code automation, and direct EHR integration. Our approach blended compliance (HIPAA, SOC2 readiness) with real-time AI workflows, scaling from pilot deployments to enterprise interest without venture capital."
-        techStack={TechStack}
-        projectLength="Ongoing since 2023 (MVP launched in < 12 months)."
-        stats={<KeyStatsGrid />}
-        testimonial={{
-          title: "Clinix AI Testimonial",
-          videoUrl:
-            "https://www.youtube-nocookie.com/embed/5IKb62-dDxI?si=yfxRPy_64Sc-_vNL",
-        }}
-        gallery={[
-          "/images/CaseStudies/clinix/clinix-5.jpg",
-          "/images/CaseStudies/clinix/clinix-6.jpg",
-          "/images/CaseStudies/clinix/clinix-7.jpg",
-          "/images/CaseStudies/clinix/clinix-8.jpg",
-        ]}
-        pitchDeck={PitchDeck}
-      />
-    </MainLayout>
+    <CaseStudy
+      title="Clinix AI"
+      subtitle="The Future of Healthcare Documentation"
+      heroImage="/images/CaseStudies/clinix/clinixai-1.jpg"
+      summary="We co-founded and built Clinix AI as an “AI Operating System for healthcare.” The project focused on ambient clinical note generation, ICD/CPT code automation, and direct EHR integration. Our approach blended compliance (HIPAA, SOC2 readiness) with real-time AI workflows, scaling from pilot deployments to enterprise interest without venture capital."
+      techStack={TechStack}
+      projectLength="Ongoing since 2023 (MVP launched in < 12 months)."
+      stats={<KeyStatsGrid />}
+      testimonial={{
+        title: "Clinix AI Testimonial",
+        videoUrl:
+          "https://www.youtube-nocookie.com/embed/5IKb62-dDxI?si=yfxRPy_64Sc-_vNL",
+      }}
+      gallery={[
+        "/images/CaseStudies/clinix/clinix-5.jpg",
+        "/images/CaseStudies/clinix/clinix-6.jpg",
+        "/images/CaseStudies/clinix/clinix-7.jpg",
+        "/images/CaseStudies/clinix/clinix-8.jpg",
+      ]}
+      pitchDeck={PitchDeck}
+    />
   );
 };
 
-export default page;
+export default CaseStudyPage;
 
 const KeyStatsGrid = () => {
   return (
