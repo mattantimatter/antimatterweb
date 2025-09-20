@@ -48,7 +48,10 @@ const HamMenu = ({ navData }: Props) => {
                     <ul className="flex flex-col gap-2 text-4xl font-semibold">
                       {navData.map((nav, index) => (
                         <li key={nav.text} className="relative pl-10">
-                          <Link href={nav.href}>
+                          <Link
+                            href={nav.href}
+                            onClick={() => setActive(!active)}
+                          >
                             <span className="opacity-30 absolute left-0 bottom-0 text-2xl">
                               0{index + 1}
                             </span>

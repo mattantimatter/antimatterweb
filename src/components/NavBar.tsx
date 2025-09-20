@@ -11,7 +11,7 @@ import HamMenu from "./ui/HamMenu";
 
 const NavData = [
   { href: "/", text: "Home" },
-  { href: "/case-study/clinixAI", text: "Work" },
+  { href: "/work", text: "Work" },
   { href: "/", text: "Services" },
   // { href: "/", text: "Company" },
   { href: "/", text: "Contact" },
