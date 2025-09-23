@@ -1,4 +1,5 @@
 "use client";
+import Reveal from "@/components/ui/Reveal";
 import TitleH1Anim from "@/components/ui/TitleH1Anim";
 import TransitionContainer from "@/components/ui/TransitionContainer";
 import { motion } from "motion/react";
@@ -73,21 +74,22 @@ const WorkComponent = ({ WorkData }: { WorkData: WorkCardProps[] }) => {
       )}
       <TransitionContainer>
         <div className="border-b border-foreground/30 pb-3">
-          <TitleH1Anim className="text-6xl lg:text-7xl xl:text-9xl font-semibold">
+          <TitleH1Anim className="text-5xl md:text-6xl lg:text-7xl xl:text-9xl font-semibold">
             WORK
           </TitleH1Anim>
         </div>
-        <div className="grid grid-cols-12 gap-x-5 gap-y-20 mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-x-5 gap-y-20 mt-10">
           {WorkData.map(({ id, image, tags, title, link }) => (
-            <div
+            <Reveal
+              delay={id % 2 === 0 ? 0.3 : 0}
               className={`${
-                id === 1 ? "col-span-8" : id === 2 ? "col-span-4" : "col-span-6"
+                id === 1
+                  ? "col-span-1 md:col-span-6 lg:col-span-7 xl:col-span-8"
+                  : id === 2
+                  ? "col-span-1 md:col-span-6 lg:col-span-5 xl:col-span-4"
+                  : "col-span-1 md:col-span-6"
               } relative group`}
               key={id}
-              onMouseMove={handleMouseMove}
-              onMouseEnter={(e) => handleMouseEnter(link, e)}
-              onMouseLeave={handleMouseLeave}
-              onClick={handleClick}
             >
               <Link href={link}>
                 <p>{id >= 10 ? id : `0${id}`}</p>
@@ -97,14 +99,18 @@ const WorkComponent = ({ WorkData }: { WorkData: WorkCardProps[] }) => {
                   width={1920}
                   height={1080}
                   className="w-full h-auto"
+                  onMouseMove={handleMouseMove}
+                  onMouseEnter={(e) => handleMouseEnter(link, e)}
+                  onMouseLeave={handleMouseLeave}
+                  onClick={handleClick}
                 />
                 <div className="flex justify-between mt-3">
-                  <h3 className="text-3xl">{title}</h3>
+                  <h3 className="text-xl lg:text-2xl xl:text-3xl">{title}</h3>
                   <div className="flex gap-2">
                     {tags.map((tag) => (
                       <div
                         key={tag}
-                        className="border py-0.5 px-2 border-foreground/20 rounded-full text-sm leading-7"
+                        className="border py-[1px] xl:py-0.5 px-1 xl:px-2 border-foreground/20 rounded-full text-sm leading-7"
                       >
                         {tag}
                       </div>
@@ -112,7 +118,7 @@ const WorkComponent = ({ WorkData }: { WorkData: WorkCardProps[] }) => {
                   </div>
                 </div>
               </Link>
-            </div>
+            </Reveal>
           ))}
         </div>
       </TransitionContainer>

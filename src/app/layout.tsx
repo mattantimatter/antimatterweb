@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className={`${geistSans.className} antialiased overflow-x-hidden`}>
         <NavBar />
         <div className="relative">

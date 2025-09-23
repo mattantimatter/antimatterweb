@@ -10,22 +10,22 @@ const WorkData = [
     link: "/case-study/clinixAI",
   },
   {
-    title: "Clinix AI",
-    image: "/images/CaseStudies/clinix/clinixai-1.jpg",
+    title: "Synergies4",
+    image: "/images/CaseStudies/synergies4.jpg",
     tags: ["Web Design", "App Design"],
     id: 2,
     link: "/case-study/clinixAI",
   },
   {
-    title: "Clinix AI",
-    image: "/images/CaseStudies/clinix/clinixai-1.jpg",
+    title: "Curehire",
+    image: "/images/CaseStudies/curehire.jpg",
     tags: ["Web Design", "App Design"],
     id: 3,
     link: "/case-study/clinixAI",
   },
   {
-    title: "Clinix AI",
-    image: "/images/CaseStudies/clinix/clinixai-1.jpg",
+    title: "OWASP",
+    image: "/images/CaseStudies/owasp.jpg",
     tags: ["Web Design", "App Design"],
     id: 4,
     link: "/case-study/clinixAI",
@@ -34,7 +34,7 @@ const WorkData = [
 
 const WorkPage = () => {
   return (
-    <MainLayout className="pt-40">
+    <MainLayout className="pt-28 md:pt-40">
       <WorkComponent WorkData={WorkData} />
     </MainLayout>
   );

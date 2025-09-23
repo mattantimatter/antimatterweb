@@ -17,18 +17,22 @@ const TitleH1Anim = ({
   useEffect(() => {
     const h1 = h1Ref.current;
     if (h1) {
-      const title = new SplitText(h1, { type: "chars,lines", linesClass });
-      gsap.fromTo(
-        title.chars,
-        { y: "100%" },
-        {
-          y: 0,
-          duration: 0.7,
-          stagger: 0.04,
-          ease: "back.out",
-          delay: 0.3,
-        }
-      );
+      const ctx = gsap.context(() => {
+        const title = new SplitText(h1, { type: "chars,lines", linesClass });
+        gsap.fromTo(
+          title.chars,
+          { y: "100%" },
+          {
+            y: 0,
+            duration: 0.7,
+            stagger: 0.04,
+            ease: "back.out",
+            delay: 0.3,
+          }
+        );
+        return () => title.revert();
+      }, h1); // 👈 pass the element, not []
+      return () => ctx.revert();
     }
   }, [linesClass]);
   return (

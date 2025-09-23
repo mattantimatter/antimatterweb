@@ -3,10 +3,13 @@ import Link from "next/link";
 import HamButton from "./HamButton";
 import NavButton from "./NavButton";
 import { AnimatePresence, motion, Variants } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FaAngleRight, FaArrowLeft, FaArrowRight } from "react-icons/fa6";
+import { ServicesData } from "@/data/services";
+import { li } from "motion/react-client";
 
 interface NavData {
-  href: string;
+  href?: string;
   text: string;
 }
 
@@ -36,7 +39,10 @@ const itemVariants: Variants = {
 
 const HamMenu = ({ navData }: Props) => {
   const [active, setActive] = useState(false);
-
+  const [serviceNav, setServiceNav] = useState(false);
+  useEffect(() => {
+    if (!active) setServiceNav(false);
+  }, [active]);
   return (
     <>
       <HamButton active={active} onClick={() => setActive(!active)} />
@@ -65,33 +71,77 @@ const HamMenu = ({ navData }: Props) => {
                     onClick={() => setActive(!active)}
                   />
                 </div>
-                <div className="relative w-full">
-                  <nav>
-                    <motion.ul
-                      className="flex flex-col gap-2 text-4xl font-semibold"
-                      variants={listVariants}
-                      initial="hidden"
-                      animate="show"
+                <div className="relative w-full ">
+                  <div className="overflow-hidden">
+                    <motion.nav
+                      animate={{ x: serviceNav ? "-100%" : 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-4xl font-semibold py-10"
                     >
-                      {navData.map((nav, index) => (
-                        <motion.li
-                          key={nav.text}
-                          className="relative pl-10"
-                          variants={itemVariants}
-                        >
-                          <Link
-                            href={nav.href}
-                            onClick={() => setActive(false)}
+                      <motion.ul
+                        className="flex flex-col gap-2 "
+                        variants={listVariants}
+                        initial="hidden"
+                        animate="show"
+                      >
+                        {navData.map((nav, index) => (
+                          <motion.li
+                            key={nav.text}
+                            className="relative pl-10"
+                            variants={itemVariants}
                           >
-                            <span className="opacity-30 absolute left-0 bottom-0 text-2xl">
-                              0{index + 1}
-                            </span>
-                            {nav.text}
-                          </Link>
-                        </motion.li>
-                      ))}
-                    </motion.ul>
-                  </nav>
+                            {nav.href ? (
+                              <Link
+                                href={nav.href}
+                                onClick={() => setActive(false)}
+                              >
+                                <span className="opacity-30 absolute left-0 bottom-0 text-2xl">
+                                  0{index + 1}
+                                </span>
+                                {nav.text}
+                              </Link>
+                            ) : (
+                              <div
+                                className="flex w-full justify-between items-center pr-10"
+                                onClick={() => setServiceNav(true)}
+                              >
+                                <span className="opacity-30 absolute left-0 bottom-0 text-2xl">
+                                  0{index + 1}
+                                </span>
+                                {nav.text} <FaArrowRight className="size-6" />
+                              </div>
+                            )}
+                          </motion.li>
+                        ))}
+                      </motion.ul>
+                      <motion.div
+                        animate={{ opacity: serviceNav ? 1 : 0 }}
+                        className="absolute top-1/2 -translate-y-1/2 left-full"
+                      >
+                        <ul className="text-3xl flex flex-col gap-1">
+                          <div
+                            className="py-3 pr-3"
+                            onClick={() => setServiceNav(false)}
+                          >
+                            <FaArrowLeft className="size-6 " />
+                          </div>
+                          {ServicesData.map((service, index) => (
+                            <li key={service.title} className="relative pl-10">
+                              <Link
+                                href={service.link}
+                                onClick={() => setActive(false)}
+                              >
+                                <span className="opacity-30 absolute left-0 bottom-0 text-2xl">
+                                  0{index + 1}
+                                </span>
+                                {service.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </motion.div>
+                    </motion.nav>
+                  </div>
                   <div className="top-full absolute left-0 mt-20 w-full">
                     <NavButton />
                   </div>
