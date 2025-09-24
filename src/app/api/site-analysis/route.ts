@@ -79,6 +79,7 @@ export async function POST(request: Request) {
         "You are a communications lead. Given separate HTML fragments for SEO, UI/UX, Platform & Tech Stack, and Technical Performance, compose a single cohesive, branded audit article. Return strictly semantic HTML only: wrap in <article> with sections in this order: Overview (short), UI/UX, SEO, Technical Performance, Platform & Tech Stack, High‑Impact Recommendations (aggregate top 6–10 actions with expected impact and difficulty). Do not duplicate content; keep it crisp and readable.",
     } as const;
 
+    const streamHint = request.headers.get("x-stream");
     const preferredModel = process.env.OPENAI_MODEL;
     const fallbackModel = process.env.OPENAI_FALLBACK_MODEL;
     const modelInUse: string = (preferredModel || fallbackModel || "gpt-4o-mini") as string;
@@ -129,6 +130,22 @@ export async function POST(request: Request) {
 
     // Ensure result is wrapped for downstream consumers
     const resultHtml = composed?.includes("<article") ? composed : `<article>${composed}</article>`;
+
+    if (streamHint) {
+      // Simple chunked streaming of HTML as it's composed; here we just stream the final HTML for simplicity
+      const encoder = new TextEncoder();
+      const stream = new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(encoder.encode(resultHtml));
+          controller.close();
+        },
+      });
+      return new Response(stream, {
+        status: 200,
+        headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" },
+      });
+    }
+
     return NextResponse.json({ result: resultHtml, parts: { seo: seoHtml, uiux: uxHtml, tech: techHtml, performance: perfHtml } });
   } catch (e) {
     return NextResponse.json({ error: "Unexpected server error" }, { status: 500 });

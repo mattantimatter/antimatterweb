@@ -9,7 +9,7 @@ type AnalysisResult = {
 };
 
 const fieldBase =
-  "w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-white/20";
+  "w-full rounded-xl bg-black/30 border border-white/15 px-4 py-3 text-sm placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-white/20";
 
 export default function StartProjectModal() {
   const { open, setOpen } = useStartProjectModal();
@@ -85,13 +85,24 @@ export default function StartProjectModal() {
     try {
       const response = await fetch("/api/site-analysis", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-stream": "1" },
         body: JSON.stringify({ websiteUrl, industry, name, title }),
       });
-      const data = await response.json();
       if (!response.ok) {
+        const data = await response.json().catch(() => ({} as any));
         setError((data?.error ? `${data.error}` : "Failed to analyze site.") + (data?.details ? ` – ${data.details}` : ""));
+      } else if (response.body) {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let acc = "";
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          acc += decoder.decode(value, { stream: true });
+          setResult({ html: acc });
+        }
       } else {
+        const data = await response.json().catch(() => ({} as any));
         setResult({ html: data?.result || "" });
       }
     } catch (err: any) {
@@ -228,34 +239,36 @@ export default function StartProjectModal() {
             )}
           </form>
 
-          <div className="lg:col-span-3 border-t lg:border-t-0 lg:border-l border-white/10 mt-4 lg:mt-0 pt-4 lg:pt-0 lg:pl-6 min-h-[220px] max-h-[70vh] overflow-y-auto pr-2">
-            {!result && !submitting && (
-              <div className="opacity-70 text-sm">
-                Enter your site URL to get an AI-driven audit with prioritized recommendations across UI/UX, SEO, performance, and platform fit.
-              </div>
-            )}
-            {submitting && (
-              <div className="opacity-80 text-sm">Running analysis…</div>
-            )}
-            {result?.html && (
-              <>
+          <div className="lg:col-span-3 border-t lg:border-t-0 lg:border-l border-white/10 mt-4 lg:mt-0 pt-4 lg:pt-0 lg:pl-6 min-h-[220px] max-h-[70vh] pr-2 flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-y-auto">
+              {!result && !submitting && (
+                <div className="opacity-70 text-sm">
+                  Enter your site URL to get an AI-driven audit with prioritized recommendations across UI/UX, SEO, performance, and platform fit.
+                </div>
+              )}
+              {submitting && (
+                <div className="opacity-80 text-sm">Running analysis…</div>
+              )}
+              {result?.html && (
                 <article
                   className="max-w-none text-sm leading-7 [&_*]:text-foreground/90 [&_h2]:text-xl [&_h2]:mt-6 [&_h2]:mb-2 [&_h3]:text-lg [&_h3]:mt-4 [&_h3]:mb-1 [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-6 [&_li]:my-1.5 [&_strong]:font-semibold"
                   dangerouslySetInnerHTML={{ __html: result.html }}
                 />
-                <div className="mt-4 flex flex-wrap gap-3">
-                  <button onClick={onDownload} className="h-10 px-4 rounded-lg bg-white/10 hover:bg-white/15">
-                    Download HTML
-                  </button>
-                  <button onClick={onExportPdf} className="h-10 px-4 rounded-lg bg-white/10 hover:bg-white/15">
-                    Download PDF
-                  </button>
-                  <button onClick={onEmailSend} disabled={!email || submitting} className="h-10 px-4 rounded-lg bg-white/10 hover:bg-white/15 disabled:opacity-60">
-                    Email Report
-                  </button>
-                </div>
-              </>
-            )}
+              )}
+            </div>
+            <div className="sticky bottom-0 bg-gradient-to-t from-[#0A0A12] via-[#0A0A12]/90 to-transparent pt-3 mt-2">
+              <div className="flex flex-wrap gap-3">
+                <button onClick={onDownload} className="h-10 px-4 rounded-lg bg-white/10 hover:bg-white/15">
+                  Download HTML
+                </button>
+                <button onClick={onExportPdf} className="h-10 px-4 rounded-lg bg-white/10 hover:bg-white/15">
+                  Download PDF
+                </button>
+                <button onClick={onEmailSend} disabled={!email || submitting} className="h-10 px-4 rounded-lg bg-white/10 hover:bg-white/15 disabled:opacity-60">
+                  Email Report
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
