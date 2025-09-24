@@ -81,11 +81,11 @@ export async function POST(request: Request) {
 
     const preferredModel = process.env.OPENAI_MODEL;
     const fallbackModel = process.env.OPENAI_FALLBACK_MODEL;
-    const candidates: string[] = [preferredModel, fallbackModel, "gpt-4o-mini", "gpt-4o"].filter(Boolean) as string[];
+    const modelInUse: string = (preferredModel || fallbackModel || "gpt-4o-mini") as string;
 
     async function chat(model: string, systemPrompt: string, user: string) {
       const controller = new AbortController();
-      const timeoutMs = Number(process.env.OPENAI_TIMEOUT_MS || 35000);
+      const timeoutMs = Number(process.env.OPENAI_TIMEOUT_MS || 20000);
       const to = setTimeout(() => controller.abort(), timeoutMs);
       try {
         const r = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -106,37 +106,26 @@ export async function POST(request: Request) {
       }
     }
 
-    // Pick the first model that successfully answers the SEO prompt,
-    // then reuse that model for the remaining prompts.
-    let modelInUse: string | null = null;
-    let seoHtml = "";
-    let lastErr = "";
-    for (const m of candidates) {
-      try {
-        seoHtml = await chat(m, prompts.seo, sharedContext);
-        modelInUse = m;
-        break;
-      } catch (e: any) {
-        lastErr = String(e?.message || e);
-      }
-    }
-    if (!modelInUse) {
-      return NextResponse.json({ error: "OpenAI error", details: lastErr.slice(0, 800) }, { status: 502 });
-    }
-
-    // Run remaining prompts in parallel using the selected model
-    const [uxHtml, techHtml, perfHtml] = await Promise.all([
+    // Run domain prompts in parallel using the selected model
+    const [seoHtml, uxHtml, techHtml, perfHtml] = await Promise.all([
+      chat(modelInUse, prompts.seo, sharedContext),
       chat(modelInUse, prompts.ux, sharedContext),
       chat(modelInUse, prompts.tech, sharedContext),
       chat(modelInUse, prompts.performance, sharedContext),
     ]);
 
     // Compose final article
-    const composed = await chat(
-      modelInUse,
-      prompts.composer,
-      `Fragments:\n\n[SEO]\n${seoHtml}\n\n[UIUX]\n${uxHtml}\n\n[TECH]\n${techHtml}\n\n[PERF]\n${perfHtml}`
-    );
+    let composed = "";
+    try {
+      composed = await chat(
+        modelInUse,
+        prompts.composer,
+        `Fragments:\n\n[SEO]\n${seoHtml}\n\n[UIUX]\n${uxHtml}\n\n[TECH]\n${techHtml}\n\n[PERF]\n${perfHtml}`
+      );
+    } catch {
+      // Fallback: quick stitched HTML if composer times out, to avoid request timeout
+      composed = `<article>${uxHtml}${seoHtml}${perfHtml}${techHtml}</article>`;
+    }
 
     // Ensure result is wrapped for downstream consumers
     const resultHtml = composed?.includes("<article") ? composed : `<article>${composed}</article>`;
