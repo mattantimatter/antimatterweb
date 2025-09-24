@@ -138,7 +138,7 @@ const ContactForm = () => {
         <p className="text-red-500 text-sm">{error}</p>
       )}
       {status === "success" && (
-        <p className="text-green-500 text-sm">Message sent! We'll be in touch.</p>
+        <p className="text-green-500 text-sm">Message sent! We&apos;ll be in touch.</p>
       )}
       <div className="flex">
         <Button type="submit" disabled={status === "submitting"}>
