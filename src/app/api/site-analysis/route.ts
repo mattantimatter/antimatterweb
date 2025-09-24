@@ -107,13 +107,51 @@ export async function POST(request: Request) {
       }
     }
 
-    // Run domain prompts in parallel using the selected model
-    const [seoHtml, uxHtml, techHtml, perfHtml] = await Promise.all([
-      chat(modelInUse, prompts.seo, sharedContext),
-      chat(modelInUse, prompts.ux, sharedContext),
-      chat(modelInUse, prompts.tech, sharedContext),
-      chat(modelInUse, prompts.performance, sharedContext),
-    ]);
+    // If streaming, send incremental chunks as each section completes
+    const doStream = Boolean(streamHint);
+    let seoHtml = "";
+    let uxHtml = "";
+    let techHtml = "";
+    let perfHtml = "";
+
+    if (doStream) {
+      const encoder = new TextEncoder();
+      const stream = new ReadableStream<Uint8Array>({
+        async start(controller) {
+          try {
+            seoHtml = await chat(modelInUse, prompts.seo, sharedContext);
+            controller.enqueue(encoder.encode(seoHtml));
+            uxHtml = await chat(modelInUse, prompts.ux, sharedContext);
+            controller.enqueue(encoder.encode(uxHtml));
+            techHtml = await chat(modelInUse, prompts.tech, sharedContext);
+            controller.enqueue(encoder.encode(techHtml));
+            perfHtml = await chat(modelInUse, prompts.performance, sharedContext);
+            controller.enqueue(encoder.encode(perfHtml));
+
+            const composed = await chat(
+              modelInUse,
+              prompts.composer,
+              `Fragments:\n\n[SEO]\n${seoHtml}\n\n[UIUX]\n${uxHtml}\n\n[TECH]\n${techHtml}\n\n[PERF]\n${perfHtml}`
+            );
+            const resultHtml = composed?.includes("<article") ? composed : `<article>${composed}</article>`;
+            controller.enqueue(encoder.encode(resultHtml));
+          } catch (e) {
+            controller.enqueue(encoder.encode(`<p>Error generating stream.</p>`));
+          } finally {
+            controller.close();
+          }
+        },
+      });
+      return new Response(stream, { status: 200, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
+    } else {
+      // Non-streamed parallel generation
+      [seoHtml, uxHtml, techHtml, perfHtml] = await Promise.all([
+        chat(modelInUse, prompts.seo, sharedContext),
+        chat(modelInUse, prompts.ux, sharedContext),
+        chat(modelInUse, prompts.tech, sharedContext),
+        chat(modelInUse, prompts.performance, sharedContext),
+      ]);
+    }
 
     // Compose final article
     let composed = "";
@@ -131,20 +169,7 @@ export async function POST(request: Request) {
     // Ensure result is wrapped for downstream consumers
     const resultHtml = composed?.includes("<article") ? composed : `<article>${composed}</article>`;
 
-    if (streamHint) {
-      // Simple chunked streaming of HTML as it's composed; here we just stream the final HTML for simplicity
-      const encoder = new TextEncoder();
-      const stream = new ReadableStream<Uint8Array>({
-        start(controller) {
-          controller.enqueue(encoder.encode(resultHtml));
-          controller.close();
-        },
-      });
-      return new Response(stream, {
-        status: 200,
-        headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" },
-      });
-    }
+    // non-stream fallback return
 
     return NextResponse.json({ result: resultHtml, parts: { seo: seoHtml, uiux: uxHtml, tech: techHtml, performance: perfHtml } });
   } catch (e) {

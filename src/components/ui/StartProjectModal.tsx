@@ -240,7 +240,11 @@ export default function StartProjectModal() {
           </form>
 
           <div className="lg:col-span-3 border-t lg:border-t-0 lg:border-l border-white/10 mt-4 lg:mt-0 pt-4 lg:pt-0 lg:pl-6 min-h-[220px] max-h-[70vh] pr-2 flex flex-col overflow-hidden">
-            <div className="flex-1 overflow-y-auto">
+            <div
+              className="flex-1 overflow-y-auto overscroll-contain"
+              onWheelCapture={(e) => e.stopPropagation()}
+              onTouchMoveCapture={(e) => e.stopPropagation()}
+            >
               {!result && !submitting && (
                 <div className="opacity-70 text-sm">
                   Enter your site URL to get an AI-driven audit with prioritized recommendations across UI/UX, SEO, performance, and platform fit.
