@@ -1,4 +1,6 @@
 import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GoArrowUpRight } from "react-icons/go";
 
 export interface ServiceCardProps {
@@ -13,13 +15,53 @@ export interface ServiceCardProps {
 
 const ServiceCard = (props: ServiceCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const cardRootRef = useRef<HTMLDivElement>(null);
   const h3Ref = useRef<HTMLHeadingElement>(null);
   const card2Ref = useRef<HTMLDivElement>(null);
+  // On mobile, keep consistent background; on large screens, highlight active card
   const bgcolor = props.active
-    ? "bg-primary"
+    ? "lg:bg-primary bg-[url('/images/service-card-bg.png')] bg-cover bg-bottom-right bg-no-repeat"
     : "bg-[url('/images/service-card-bg.png')] bg-cover bg-bottom-right bg-no-repeat";
 
   useEffect(() => {
+    // Simple appear-on-scroll for mobile only
+    if (typeof window !== "undefined" && cardRootRef.current) {
+      const isMobile = window.matchMedia("(max-width: 1023px)").matches;
+      if (isMobile) {
+        gsap.registerPlugin(ScrollTrigger);
+        const ctx = gsap.context(() => {
+          gsap.fromTo(
+            cardRootRef.current,
+            { autoAlpha: 0, y: 24, scale: 0.98 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.6,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: cardRootRef.current!,
+                start: "top 85%",
+                toggleActions: "play none none none",
+              },
+            }
+          );
+        }, cardRootRef);
+        return () => ctx.revert();
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    // Desktop-only transform logic; keep natural flow on mobile
+    if (typeof window !== "undefined") {
+      const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+      if (!isDesktop) {
+        if (h3Ref.current) h3Ref.current.style.transform = "none";
+        if (card2Ref.current) card2Ref.current.style.paddingTop = `0px`;
+        return;
+      }
+    }
     if (h3Ref.current && cardRef.current && card2Ref.current) {
       const h3Height = h3Ref.current.offsetHeight;
       const cardHeight = cardRef.current.offsetHeight;
@@ -35,11 +77,11 @@ const ServiceCard = (props: ServiceCardProps) => {
   }, [props.active]);
 
   return (
-    <div className="service-card w-full lg:w-auto">
+    <div ref={cardRootRef} className="service-card w-full lg:w-auto">
       <div
-        className={`p-[1px] grow shrink-0 relative border border-zinc-700 overflow-hidden rounded-3xl w-full h-auto min-h-[320px] sm:min-h-[360px] lg:w-[300px] lg:h-[350px] xl:w-[340px] xl:h-[380px] 2xl:w-[420px] 2xl:h-[480px] ${bgcolor} duration-300 ${
-          props.active ? "scale-100" : "scale-90"
-        } `}
+        className={`p-[1px] grow shrink-0 relative border border-zinc-700 overflow-hidden rounded-3xl w-full h-auto min-h-[360px] lg:w-[300px] lg:h-[350px] xl:w-[340px] xl:h-[380px] 2xl:w-[420px] 2xl:h-[480px] ${bgcolor} duration-300 scale-100 ${
+          props.active ? "lg:scale-100" : "lg:scale-90"
+        }`}
       >
         <div className={`p-5 sm:p-6 2xl:p-10 h-full relative z-10`}>
           <div
@@ -48,15 +90,15 @@ const ServiceCard = (props: ServiceCardProps) => {
 
           <div className="relative h-full z-10" ref={cardRef}>
             <h3
-              className={`text-xl pr-1 2xl:text-2xl font-semibold left-0 duration-800 ease-in-out top-0 absolute origin-top-left `}
+              className={`text-xl pr-1 2xl:text-2xl font-semibold left-0 duration-800 ease-in-out top-0 lg:absolute origin-top-left `}
               ref={h3Ref}
             >
               {props.title}
             </h3>
-            <GoArrowUpRight className="size-8 sm:size-9 lg:size-10 absolute right-0 top-0" />
+            <GoArrowUpRight className="size-8 sm:size-9 lg:size-10 lg:absolute right-0 top-0" />
             <div
               className={`h-full ${
-                props.active ? "-translate-y-full" : "pt-0"
+                props.active ? "lg:-translate-y-full" : "lg:pt-0"
               } duration-800 ease-in-out`}
             >
               <div className="flex flex-col justify-between h-full relative">
@@ -97,9 +139,9 @@ const ServiceCard = (props: ServiceCardProps) => {
                         ))}
                       </div>
                     ) : (
-                      <div className="flex flex-col text-sm gap-1">
+                      <div className="grid grid-cols-3 gap-x-4 gap-y-3 pt-1 text-sm">
                         {props.tools?.map((tool, index) => (
-                          <span key={index} className="">
+                          <span key={index} className="text-center">
                             {tool}
                           </span>
                         ))}
@@ -111,7 +153,7 @@ const ServiceCard = (props: ServiceCardProps) => {
             </div>
           </div>
         </div>
-        <div className="absolute inset-0 -translate-1/2 size-[500px] bg-radial from-[#B4B5ED] via-[696AAC] to-transparent"></div>
+        <div className="hidden lg:block absolute inset-0 -translate-1/2 size-[500px] bg-radial from-[#B4B5ED] via-[696AAC] to-transparent"></div>
       </div>
     </div>
   );
