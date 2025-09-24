@@ -16,6 +16,7 @@ export default function StartProjectModal() {
   const [industry, setIndustry] = useState("");
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
+  const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -68,6 +69,42 @@ export default function StartProjectModal() {
       }
     } catch (err: any) {
       setError("Unexpected error. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  function onDownload() {
+    if (!result?.html) return;
+    const blob = new Blob([
+      `<!doctype html><html lang="en"><head><meta charset="utf-8"/><title>Antimatter AI Website Audit</title><meta name="viewport" content="width=device-width, initial-scale=1"/><style>body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;background:#0B0B12;color:#EAEAF0;padding:32px;line-height:1.7}h2{margin-top:28px;margin-bottom:12px}h3{margin-top:16px;margin-bottom:8px}p{margin:8px 0}ul{margin:10px 0 10px 20px}li{margin:6px 0}</style></head><body><article>${result.html}</article></body></html>`
+    ], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "antimatter-ai-website-audit.html";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  async function onEmailSend() {
+    if (!result?.html || !email) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      const resp = await fetch("/api/email-audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to: email, html: result.html, subject: "Your Antimatter AI Website Audit" }),
+      });
+      const data = await resp.json();
+      if (!resp.ok) {
+        setError(data?.error || "Failed to send email.");
+      }
+    } catch (e) {
+      setError("Email failed. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -140,6 +177,17 @@ export default function StartProjectModal() {
               />
             </div>
 
+            <div className="flex flex-col gap-2">
+              <label className="text-xs uppercase tracking-wide opacity-70">Email for report (optional)</label>
+              <input
+                className={fieldBase}
+                placeholder="you@company.com"
+                inputMode="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
             <button
               type="submit"
               disabled={!canSubmit || submitting}
@@ -163,7 +211,17 @@ export default function StartProjectModal() {
               <div className="opacity-80 text-sm">Running analysis…</div>
             )}
             {result?.html && (
-              <article className="prose prose-invert max-w-none [&_*]:text-foreground/90" dangerouslySetInnerHTML={{ __html: result.html }} />
+              <>
+                <article className="prose prose-invert max-w-none [&_*]:text-foreground/90" dangerouslySetInnerHTML={{ __html: result.html }} />
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <button onClick={onDownload} className="h-10 px-4 rounded-lg bg-white/10 hover:bg-white/15">
+                    Download HTML
+                  </button>
+                  <button onClick={onEmailSend} disabled={!email || submitting} className="h-10 px-4 rounded-lg bg-white/10 hover:bg-white/15 disabled:opacity-60">
+                    Email Report
+                  </button>
+                </div>
+              </>
             )}
           </div>
         </div>

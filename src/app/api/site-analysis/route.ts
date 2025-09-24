@@ -1,16 +1,24 @@
 import { NextResponse } from "next/server";
 
-async function fetchHtmlSnippet(url: string): Promise<string> {
+async function fetchHtmlSnippet(url: string): Promise<{ snippet: string; headers: Record<string, string>; fetchMs: number }> {
   try {
+    const start = Date.now();
     const resp = await fetch(url, {
       headers: { "User-Agent": "AntimatterAI-SiteAudit/1.0" },
       cache: "no-store",
     });
-    if (!resp.ok) return "";
+    const fetchMs = Date.now() - start;
+    if (!resp.ok) return { snippet: "", headers: {}, fetchMs } as { snippet: string; headers: Record<string, string>; fetchMs: number };
     const html = await resp.text();
-    return html.replace(/\s+/g, " ").slice(0, 8000);
+    const headers: Record<string, string> = {
+      "server": resp.headers.get("server") || "",
+      "x-powered-by": resp.headers.get("x-powered-by") || "",
+      "content-type": resp.headers.get("content-type") || "",
+      "content-length": resp.headers.get("content-length") || String(html.length),
+    };
+    return { snippet: html.replace(/\s+/g, " ").slice(0, 8000), headers, fetchMs } as const;
   } catch {
-    return "";
+    return { snippet: "", headers: {}, fetchMs: 0 };
   }
 }
 
@@ -46,13 +54,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
     }
 
-    const snippet = await fetchHtmlSnippet(normalized);
+    const { snippet, headers, fetchMs } = await fetchHtmlSnippet(normalized);
 
     const messages = [
       {
         role: "system",
         content:
-          "You are a senior web architect at Antimatter AI. Analyze a public website and produce a concise, prioritized audit. Return strictly semantic HTML (no markdown, no code fences). Use h2/h3, p, ul/li, and strong tags. Sections: <h2>Overview</h2> (business/UX intent), <h2>UI/UX</h2>, <h2>SEO</h2>, <h2>Technical Performance</h2>, <h2>Platform & Architecture</h2>, and <h2>High‑Impact Recommendations</h2> (ordered list). Be concrete with examples and rationale. Keep to ~300–600 words total.",
+          "You are a principal web architect at Antimatter AI. Analyze a public website and produce a personalized, prioritized audit for a business stakeholder. Return strictly semantic HTML (no markdown, no code fences). Use <h2>, <h3>, <p>, <ul>, <li>, and <strong> tags with generous spacing and readable structure. The report must include these sections, in order:\n\n<h2>Overview</h2> (business/UX intent and who the site serves)\n<h2>UI/UX Improvements</h2> (layout, hierarchy, visual design, readability, mobile, motion)\n<h2>Navigation & IA</h2> (menu clarity, information architecture, findability, internal linking)\n<h2>Conversion Optimization</h2> (value propositions, social proof, CTAs, forms, friction removals, experiment ideas)\n<h2>Technical Performance</h2> (Core Web Vitals hypotheses, render path, images/fonts, caching/CDN)\n<h2>Accessibility</h2> (color contrast, focus states, semantics, keyboard, ARIA)\n<h2>Platform & Tech Stack</h2> (inferred stack, risks, recommended upgrades)\n<h2>High‑Impact Recommendations</h2> (ordered list of 5–8 specific actions with expected impact)\n\nBe concrete with examples drawn from the snippet. Use short paragraphs and bulleted lists.",
       },
       {
         role: "user",
@@ -60,22 +68,35 @@ export async function POST(request: Request) {
 Requester: ${name || "(unspecified)"}${title ? ", " + title : ""}
 Target URL: ${normalized}
 
+Fetch Meta: first_byte_ms≈${fetchMs}, headers=${JSON.stringify(headers)}
 Website HTML snippet (truncated):\n${snippet}`,
       },
     ];
 
-    const resp = await fetch("https://api.openai.com/v1/chat/completions", {
+    // Prefer configured model; attempt GPT‑5 if available, with graceful fallback.
+    const preferredModel = process.env.OPENAI_MODEL || "gpt-5"; // if unavailable, we fallback below
+    const fallbackModel = process.env.OPENAI_FALLBACK_MODEL || "gpt-4o-mini";
+
+    async function callOpenAI(model: string) {
+      return fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model,
         messages,
         temperature: 0.3,
       }),
-    });
+      });
+    }
+
+    let resp = await callOpenAI(preferredModel);
+    if (!resp.ok) {
+      // Retry once with fallback model
+      resp = await callOpenAI(fallbackModel);
+    }
 
     if (!resp.ok) {
       const err = await resp.text();
