@@ -73,9 +73,13 @@ Website HTML snippet (truncated):\n${snippet}`,
       },
     ];
 
-    // Prefer configured model; attempt GPT‑5 if available, with graceful fallback.
-    const preferredModel = process.env.OPENAI_MODEL || "gpt-5"; // if unavailable, we fallback below
-    const fallbackModel = process.env.OPENAI_FALLBACK_MODEL || "gpt-4o-mini";
+    // Prefer configured model; attempt GPT‑5 if available, with graceful fallback chain.
+    const candidates: string[] = [
+      process.env.OPENAI_MODEL || "gpt-5",
+      "gpt-5-turbo",
+      process.env.OPENAI_FALLBACK_MODEL || "gpt-4o",
+      "gpt-4o-mini",
+    ].filter(Boolean) as string[];
 
     async function callOpenAI(model: string) {
       return fetch("https://api.openai.com/v1/chat/completions", {
@@ -85,17 +89,32 @@ Website HTML snippet (truncated):\n${snippet}`,
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model,
-        messages,
-        temperature: 0.3,
+          model,
+          messages,
+          temperature: 0.3,
       }),
       });
     }
 
-    let resp = await callOpenAI(preferredModel);
-    if (!resp.ok) {
-      // Retry once with fallback model
-      resp = await callOpenAI(fallbackModel);
+    let resp: Response | null = null;
+    let lastErrorText = "";
+    for (const model of candidates) {
+      try {
+        const r = await callOpenAI(model);
+        if (r.ok) {
+          resp = r;
+          break;
+        }
+        lastErrorText = await r.text();
+      } catch (e: any) {
+        lastErrorText = String(e?.message || e);
+      }
+    }
+    if (!resp) {
+      return NextResponse.json(
+        { error: "OpenAI error", details: lastErrorText.slice(0, 800) },
+        { status: 502 }
+      );
     }
 
     if (!resp.ok) {

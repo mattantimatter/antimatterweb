@@ -63,7 +63,7 @@ export default function StartProjectModal() {
       });
       const data = await response.json();
       if (!response.ok) {
-        setError(data?.error || "Failed to analyze site.");
+        setError((data?.error ? `${data.error}` : "Failed to analyze site.") + (data?.details ? ` – ${data.details}` : ""));
       } else {
         setResult({ html: data?.result || "" });
       }
@@ -197,7 +197,7 @@ export default function StartProjectModal() {
             </button>
 
             {error && (
-              <div className="text-red-400 text-sm pt-2">{error}</div>
+              <div className="text-red-400 text-sm pt-2 whitespace-pre-wrap break-words">{error}</div>
             )}
           </form>
 
