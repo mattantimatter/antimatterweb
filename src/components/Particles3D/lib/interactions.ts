@@ -60,20 +60,22 @@ export function setupInteractions(
     const media = gsap.matchMedia();
     media.add(
       {
-        isMobile: "(min-width: 1024px)",
+        // Treat below 1024px as mobile
         isDesktop: "(min-width: 1536px)",
         isScreen1: "(min-width: 1350px)",
+        isTabletUp: "(min-width: 1024px)",
       },
       (context) => {
-        const { isMobile, isDesktop, isScreen1 } = context.conditions!;
+        const { isDesktop, isScreen1, isTabletUp } = context.conditions!;
 
-        const xValue = isDesktop
-          ? "-55%"
-          : isScreen1
-          ? "-60%"
-          : isMobile
-          ? "-50%"
-          : "0";
+        // On phones (<1024px), do NOT transform the particles or morph on scroll
+        if (!isTabletUp) {
+          // Ensure sphere stays centered and static on mobile
+          gsap.set("#particles3d", { clearProps: "x,y", x: 0, y: 0 });
+          return;
+        }
+
+        const xValue = isDesktop ? "-55%" : isScreen1 ? "-60%" : "-50%";
 
         const timeline = gsap.timeline({
           scrollTrigger: {
@@ -100,66 +102,80 @@ export function setupInteractions(
 
     const cardElements = gsap.utils.toArray(".service-card") as HTMLElement[];
     const timeline2 = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#services",
-        start: "center center",
-        end: "+=3000",
-        pinSpacing: true,
-        pin: true,
-        scrub: true,
-      },
+      scrollTrigger: (self => {
+        // Disable pinning/horizontal scroll animation on phones for better UX
+        const isTabletUp = window.matchMedia("(min-width: 1024px)").matches;
+        if (!isTabletUp) return undefined as unknown as ScrollTrigger.Vars;
+        return {
+          trigger: "#services",
+          start: "center center",
+          end: "+=3000",
+          pinSpacing: true,
+          pin: true,
+          scrub: true,
+        } as ScrollTrigger.Vars;
+      }) as unknown as ScrollTrigger.Vars,
     });
 
     const pauseDuration = 0.5;
 
-    cardElements.forEach((el, index) => {
-      if (index === cardElements.length - 1) return;
-      const cardWidth = el.offsetWidth;
+    const isTabletUpForCards = window.matchMedia("(min-width: 1024px)").matches;
+    if (isTabletUpForCards) {
+      cardElements.forEach((el, index) => {
+        if (index === cardElements.length - 1) return;
+        const cardWidth = el.offsetWidth;
 
-      timeline2.to(
-        "#service-cards",
-        {
-          x: -(cardWidth * (1 + index)),
-          duration: 1,
-          onComplete: () => {
-            setActiveIndex(index + 1);
-            morphToShape(index + 2);
+        timeline2.to(
+          "#service-cards",
+          {
+            x: -(cardWidth * (1 + index)),
+            duration: 1,
+            onComplete: () => {
+              setActiveIndex(index + 1);
+              morphToShape(index + 2);
+            },
+            onReverseComplete: () => {
+              setActiveIndex(index);
+              morphToShape(index + 1);
+            },
           },
-          onReverseComplete: () => {
-            setActiveIndex(index);
-            morphToShape(index + 1);
+          `+=${pauseDuration}`
+        );
+        timeline2.to(
+          cardElements[index],
+          {
+            opacity: 0,
+            scale: 0.5,
+            delay: 1,
+            duration: 0.5,
+            ease: "power1.inOut",
           },
-        },
-        `+=${pauseDuration}`
-      );
-      timeline2.to(
-        cardElements[index],
-        {
-          opacity: 0,
-          scale: 0.5,
-          delay: 1,
-          duration: 0.5,
-          ease: "power1.inOut",
-        },
-        "<-0.7"
-      );
-    });
+          "<-0.7"
+        );
+      });
+    }
 
     const timeline3 = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#service-section",
-        start: "bottom bottom",
-        scrub: true,
-        invalidateOnRefresh: true,
-      },
+      scrollTrigger: (self => {
+        const isTabletUp = window.matchMedia("(min-width: 1024px)").matches;
+        if (!isTabletUp) return undefined as unknown as ScrollTrigger.Vars;
+        return {
+          trigger: "#service-section",
+          start: "bottom bottom",
+          scrub: true,
+          invalidateOnRefresh: true,
+        } as ScrollTrigger.Vars;
+      }) as unknown as ScrollTrigger.Vars,
     });
 
-    timeline3.to("#particles3d", {
-      duration: 1,
-      delay: 0.2,
-      ease: "none",
-      y: "-100%",
-    });
+    if (window.matchMedia("(min-width: 1024px)").matches) {
+      timeline3.to("#particles3d", {
+        duration: 1,
+        delay: 0.2,
+        ease: "none",
+        y: "-100%",
+      });
+    }
   });
 
   function onResize(

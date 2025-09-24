@@ -35,13 +35,13 @@ const ServiceCard = (props: ServiceCardProps) => {
   }, [props.active]);
 
   return (
-    <div className="service-card">
+    <div className="service-card w-full lg:w-auto">
       <div
-        className={`p-[1px] grow shrink-0 relative border border-zinc-700 overflow-hidden rounded-3xl w-[300px] h-[350px] sm:w-[340px] sm:h-[380px] 2xl:w-[420px] 2xl:h-[480px] ${bgcolor} duration-300 ${
+        className={`p-[1px] grow shrink-0 relative border border-zinc-700 overflow-hidden rounded-3xl w-full h-auto min-h-[320px] sm:min-h-[360px] lg:w-[300px] lg:h-[350px] xl:w-[340px] xl:h-[380px] 2xl:w-[420px] 2xl:h-[480px] ${bgcolor} duration-300 ${
           props.active ? "scale-100" : "scale-90"
         } `}
       >
-        <div className={`p-6 2xl:p-10 h-full relative z-10`}>
+        <div className={`p-5 sm:p-6 2xl:p-10 h-full relative z-10`}>
           <div
             className={`w-full h-full duration-200 ${bgcolor} absolute inset-0 rounded-3xl`}
           ></div>
@@ -53,7 +53,7 @@ const ServiceCard = (props: ServiceCardProps) => {
             >
               {props.title}
             </h3>
-            <GoArrowUpRight className="size-10 absolute right-0 top-0" />
+            <GoArrowUpRight className="size-8 sm:size-9 lg:size-10 absolute right-0 top-0" />
             <div
               className={`h-full ${
                 props.active ? "-translate-y-full" : "pt-0"
@@ -61,7 +61,7 @@ const ServiceCard = (props: ServiceCardProps) => {
             >
               <div className="flex flex-col justify-between h-full relative">
                 <div className="flex justify-between">
-                  <h4 className="text-4xl font-semibold">{props.number}</h4>
+                  <h4 className="text-3xl sm:text-4xl font-semibold">{props.number}</h4>
                 </div>
               </div>
               <div
@@ -71,7 +71,7 @@ const ServiceCard = (props: ServiceCardProps) => {
                 <div className="flex justify-between">
                   <p className="text-sm 2xl:text-base">{props.description}</p>
                 </div>
-                <div className="flex gap-5 justify-between">
+                <div className="flex gap-5 justify-between flex-col sm:flex-row">
                   <div>
                     <h3 className="text-foreground/60 text-lg">Services</h3>
                     <div className="flex flex-col text-sm gap-1">

@@ -6,7 +6,10 @@ import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract, SiRe
 const ServiceCardContainer = () => {
   const activeIndex = useActiveIndex((state) => state.activeIndex);
   return (
-    <div className="flex" id="service-cards">
+    <div
+      className="flex flex-col gap-6 sm:gap-8 md:gap-10 lg:flex-row lg:gap-0"
+      id="service-cards"
+    >
       {serviceCardData.map((card, index) => (
         <ServiceCard
           key={card.title}
