@@ -108,7 +108,20 @@ const Loading = () => {
 
   // Measure box width via ResizeObserver (less work than ref-callback churn)
   const [box2Width, setBox2Width] = useState(0);
+  const [box2Height, setBox2Height] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const boxRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // track mobile viewport
+    if (typeof window !== "undefined") {
+      const mql = window.matchMedia("(max-width: 640px)");
+      const listener = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+      setIsMobile(mql.matches);
+      mql.addEventListener("change", listener);
+      return () => mql.removeEventListener("change", listener);
+    }
+  }, []);
 
   useEffect(() => {
     if (!boxRef.current || typeof ResizeObserver === "undefined") return;
@@ -117,21 +130,27 @@ const Loading = () => {
       const entry = entries[0];
       if (entry?.contentRect?.width) {
         setBox2Width(Math.round(entry.contentRect.width));
+        setBox2Height(Math.round(entry.contentRect.height));
       } else {
         setBox2Width(el.offsetWidth);
+        setBox2Height(el.offsetHeight);
       }
     });
     ro.observe(el);
     // initialize immediately
     setBox2Width(el.offsetWidth);
+    setBox2Height(el.offsetHeight);
     return () => ro.disconnect();
   }, []);
 
   const padding = 8; // Tailwind p-2
-  const maxWidth = useMemo(() => {
-    // 👇 minimize layout work by recomputing only when inputs change
+  const maxCrossSize = useMemo(() => {
+    // minimize layout work by recomputing only when inputs change
+    if (isMobile) {
+      return `max(${100 - counter}%, ${box2Height + padding * 2}px)`;
+    }
     return `max(${100 - counter}%, ${box2Width + padding * 2}px)`;
-  }, [counter, box2Width]);
+  }, [isMobile, counter, box2Width, box2Height]);
 
   return (
     <AnimatePresence>
@@ -150,10 +169,10 @@ const Loading = () => {
 
           <div className="relative h-full flex-1">
             <motion.div
-              className="absolute rounded-3xl top-0 right-0 bg-zinc-900 w-full h-full p-2 will-change-[max-width]"
-              initial={{ maxWidth: "100%" }}
-              animate={{ maxWidth }}
-              exit={{ x: 500 }}
+              className={`${isMobile ? "absolute rounded-3xl bottom-0 left-0" : "absolute rounded-3xl top-0 right-0"} bg-zinc-900 w-full h-full p-2 ${isMobile ? "will-change-[max-height]" : "will-change-[max-width]"}`}
+              initial={isMobile ? { maxHeight: "100%" } : { maxWidth: "100%" }}
+              animate={isMobile ? { maxHeight: maxCrossSize } : { maxWidth: maxCrossSize }}
+              exit={isMobile ? { y: 500 } : { x: 500 }}
               transition={{
                 type: "spring",
                 stiffness: 80,
@@ -164,7 +183,7 @@ const Loading = () => {
               <div className="relative h-full">
                 <div
                   ref={boxRef}
-                  className="w-96 bg-gradient-to-b from-background to-primary h-full rounded-3xl flex flex-col justify-between p-5"
+                  className={`${isMobile ? "w-full h-96" : "w-96 h-full"} bg-gradient-to-b from-background to-primary rounded-3xl flex flex-col justify-between p-5`}
                 >
                   <div className="flex">
                     <span className="text-8xl tracking-tighter">
