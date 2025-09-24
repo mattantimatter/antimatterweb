@@ -90,8 +90,7 @@ const HeroComponent = () => {
             >
               <div className="flex max-w-xs lg:max-w-lg flex-col gap-10 md:items-start items-center text-center md:text-left">
                 <p>
-                  Transforming ideas into digital reality with AI, Web3, and
-                  Cutting-Edge Technology.
+                  We empower organizations with AI that turns complex challenges into real outcomes.
                 </p>
                 <div className="flex text-lg">
                   <Button>Start Your Project</Button>
