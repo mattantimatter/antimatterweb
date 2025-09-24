@@ -1,6 +1,7 @@
 "use client";
 import ServiceCard, { ServiceCardProps } from "./ServiceCard";
 import { useActiveIndex } from "@/store";
+import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract } from "react-icons/si";
 
 const ServiceCardContainer = () => {
   const activeIndex = useActiveIndex((state) => state.activeIndex);
@@ -22,10 +23,24 @@ export default ServiceCardContainer;
 const serviceCardData: ServiceCardProps[] = [
   {
     number: "01",
-    title: "Design",
-    description: "Creating user-centric designs that captivate and engage.",
-    services: ["UI/UX Design", "Web Development", "Mobile App"],
-    tools: ["Figma", "Sketch", "Adobe XD"],
+    title: "Product Design",
+    description:
+      "End-to-end product design—from research and UX flows to polished UI systems and developer-ready handoff.",
+    services: [
+      "User Research & Strategy",
+      "UX Flows & Wireframes",
+      "UI Systems & Prototypes",
+      "Design Ops & Dev Handoff",
+    ],
+    tools: ["Figma", "Sketch", "Adobe XD", "Blender", "Three.js", "Abstract"],
+    toolIcons: [
+      <SiFigma key="figma" />,
+      <SiSketch key="sketch" />,
+      <SiAdobexd key="xd" />,
+      <SiBlender key="blender" />,
+      <SiThreedotjs key="three" />,
+      <SiAbstract key="abstract" />,
+    ],
   },
   {
     number: "02",

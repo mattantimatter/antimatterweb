@@ -8,6 +8,7 @@ export interface ServiceCardProps {
   description?: string;
   services?: string[];
   tools?: string[];
+  toolIcons?: React.ReactNode[];
 }
 
 const ServiceCard = (props: ServiceCardProps) => {
@@ -83,13 +84,27 @@ const ServiceCard = (props: ServiceCardProps) => {
                   </div>
                   <div>
                     <h3 className="text-foreground/60 text-lg">Tools</h3>
-                    <div className="flex flex-col text-sm gap-1">
-                      {props.tools?.map((tool, index) => (
-                        <span key={index} className="">
-                          {tool}
-                        </span>
-                      ))}
-                    </div>
+                    {props.toolIcons && props.toolIcons.length > 0 ? (
+                      <div className="grid grid-cols-3 gap-x-5 gap-y-4 pt-1">
+                        {props.toolIcons.map((IconNode, index) => (
+                          <span
+                            key={index}
+                            className="flex items-center justify-center text-3xl opacity-90"
+                            aria-hidden
+                          >
+                            {IconNode}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col text-sm gap-1">
+                        {props.tools?.map((tool, index) => (
+                          <span key={index} className="">
+                            {tool}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
