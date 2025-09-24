@@ -27,6 +27,12 @@ export const metadata: Metadata = {
     siteName: "Antimatter AI",
     images: [
       {
+        url: "/images/og-home.jpg",
+        width: 1600,
+        height: 900,
+        alt: "Antimatter AI homepage",
+      },
+      {
         url: "/images/clientsLightCurve.jpg",
         width: 1458,
         height: 86,
@@ -42,20 +48,14 @@ export const metadata: Metadata = {
     description:
       "We empower organizations with AI that turns complex challenges into real outcomes.",
     images: [
-      {
-        url: "/images/clientsLightCurve.jpg",
-        alt: "Antimatter AI light curve graphic",
-      },
+      { url: "/images/og-home.jpg", alt: "Antimatter AI homepage" },
+      { url: "/images/clientsLightCurve.jpg", alt: "Antimatter AI light curve graphic" },
     ],
   },
   icons: {
-    icon: [
-      { url: "/images/glowingCircle2.png", type: "image/png" },
-    ],
-    shortcut: ["/images/glowingCircle2.png"],
-    apple: [
-      { url: "/images/glowingCircle2.png", type: "image/png" },
-    ],
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: ["/icon.svg"],
+    apple: [{ url: "/icon.svg", type: "image/svg+xml" }],
   },
   robots: {
     index: true,
