@@ -95,12 +95,21 @@ export default function StartProjectModal() {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let acc = "";
+        let buffer = "";
         while (true) {
           const { value, done } = await reader.read();
           if (done) break;
-          acc += decoder.decode(value, { stream: true });
+          const chunk = decoder.decode(value, { stream: true });
+          buffer += chunk;
+          // Emit roughly word-by-word by splitting on spaces periodically
+          const parts = buffer.split(/(\s+)/);
+          // Leave the last partial token in buffer
+          buffer = parts.pop() || "";
+          acc += parts.join("");
           setResult({ html: acc });
         }
+        acc += buffer;
+        setResult({ html: acc });
       } else {
         const data = await response.json().catch(() => ({} as any));
         setResult({ html: data?.result || "" });

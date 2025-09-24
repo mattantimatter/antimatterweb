@@ -68,15 +68,15 @@ export async function POST(request: Request) {
 
     const prompts = {
       seo:
-        "You are an enterprise SEO lead. Return strictly semantic HTML for <section data-part=seo> with <h2>SEO</h2> including: crawl/indexability, metadata, headings, internal linking, schema, image alts, page speed SEO factors, and 6–10 prioritized, specific fixes with example snippets of improved titles/descriptions. Keep paragraphs concise and use <ul><li> for checklists.",
+        "You are an enterprise SEO lead. Return strictly semantic HTML ONLY (no markdown, no backticks, no code fences). Produce <section data-part=seo> with <h2>SEO</h2> and concise bullets focused on what matters for the user. Cover: crawl/indexability, metadata, headings, internal linking, schema, image alts, page-speed SEO factors. Include a <h3>Prioritized Fixes</h3> with 6–8 highly specific, measurable actions (e.g., rewritten title/description examples, exact pages/patterns, expected impact). Be concrete; remove filler.",
       ux:
-        "You are a senior product designer. Return strictly semantic HTML for <section data-part=uiux> with <h2>UI/UX</h2> covering hierarchy, readability, layout, visual design, motion, accessibility heuristics, and mobile. Include concrete improvements tied to observed snippet details.",
+        "You are a senior product designer. Return strictly semantic HTML ONLY. Produce <section data-part=uiux> with <h2>UI/UX</h2> and short, relevant points tied to the snippet (hierarchy, readability, layout, visual design, motion, accessibility, mobile). Give a <h3>Top UX Fixes</h3> with 5–7 actionable bullets. No code fences.",
       tech:
-        "You are a principal full‑stack architect. Return strictly semantic HTML for <section data-part=tech> with <h2>Platform & Tech Stack</h2> inferred technologies, risks, security considerations, CMS/e‑commerce notes, and recommended upgrades with benefits.",
+        "You are a principal full‑stack architect. Return strictly semantic HTML ONLY. Produce <section data-part=tech> with <h2>Platform & Tech Stack</h2>, inferred technologies (if uncertain, say 'likely'), key risks, security considerations, CMS/e‑commerce notes, and a <h3>Recommended Upgrades</h3> with user‑relevant benefits. No backticks.",
       performance:
-        "You are a web performance engineer. Return strictly semantic HTML for <section data-part=perf> with <h2>Technical Performance</h2> focusing on Core Web Vitals hypotheses, render blocking, bundling, images/fonts, caching/CDN. Provide a prioritized remediation plan with estimated impact.",
+        "You are a web performance engineer. Return strictly semantic HTML ONLY. Produce <section data-part=perf> with <h2>Technical Performance</h2> focusing on Core Web Vitals hypotheses and a prioritized remediation plan with estimated impact in plain language (e.g., 'Reduce LCP by ~30%'). Keep it concise and relevant. No code fences.",
       composer:
-        "You are a communications lead. Given separate HTML fragments for SEO, UI/UX, Platform & Tech Stack, and Technical Performance, compose a single cohesive, branded audit article. Return strictly semantic HTML only: wrap in <article> with sections in this order: Overview (short), UI/UX, SEO, Technical Performance, Platform & Tech Stack, High‑Impact Recommendations (aggregate top 6–10 actions with expected impact and difficulty). Do not duplicate content; keep it crisp and readable.",
+        "You are a communications lead. Given separate HTML fragments (already HTML), compose a single cohesive, branded audit article. Output strictly semantic HTML ONLY (no markdown). Wrap in <article>. Order: <h2>Overview</h2>, <h2>UI/UX</h2>, <h2>SEO</h2>, <h2>Technical Performance</h2>, <h2>Platform & Tech Stack</h2>, <h2>High‑Impact Recommendations</h2> (top 6–8 actions with impact/difficulty). Remove any stray text like 'html' or backticks. Keep it concise and relevant to the user.",
     } as const;
 
     const streamHint = request.headers.get("x-stream");
