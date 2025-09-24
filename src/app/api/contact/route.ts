@@ -55,6 +55,7 @@ export async function POST(request: Request) {
 			body: JSON.stringify({
 				from: `Antimatter AI <${fromEmail}>`,
 				to: [toEmail],
+				reply_to: email,
 				subject,
 				html,
 			}),

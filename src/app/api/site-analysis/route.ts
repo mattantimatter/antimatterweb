@@ -73,27 +73,39 @@ Website HTML snippet (truncated):\n${snippet}`,
       },
     ];
 
-    // Prefer configured model; attempt GPT‑5 if available, with graceful fallback chain.
+    // Prefer configured model; fall back to stable, widely available models.
+    // Avoid defaulting to unreleased models which can cause 404/unsupported-model errors.
+    const preferredModel = process.env.OPENAI_MODEL;
+    const fallbackModel = process.env.OPENAI_FALLBACK_MODEL;
     const candidates: string[] = [
-      process.env.OPENAI_MODEL || "gpt-5",
-      "gpt-5-turbo",
-      process.env.OPENAI_FALLBACK_MODEL || "gpt-4o",
+      preferredModel,
+      fallbackModel,
       "gpt-4o-mini",
+      "gpt-4o",
     ].filter(Boolean) as string[];
 
     async function callOpenAI(model: string) {
-      return fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-          model,
-          messages,
-          temperature: 0.3,
-      }),
-      });
+      const controller = new AbortController();
+      const timeoutMs = Number(process.env.OPENAI_TIMEOUT_MS || 30000);
+      const timeout = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        return await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+            "User-Agent": "AntimatterAI-SiteAudit/1.0",
+          },
+          body: JSON.stringify({
+            model,
+            messages,
+            temperature: 0.3,
+          }),
+          signal: controller.signal,
+        });
+      } finally {
+        clearTimeout(timeout);
+      }
     }
 
     let resp: Response | null = null;
@@ -119,7 +131,10 @@ Website HTML snippet (truncated):\n${snippet}`,
 
     if (!resp.ok) {
       const err = await resp.text();
-      return NextResponse.json({ error: "OpenAI error", details: err }, { status: 502 });
+      return NextResponse.json(
+        { error: "OpenAI error", details: `status=${resp.status} ${resp.statusText} – ${err}`.slice(0, 800) },
+        { status: 502 }
+      );
     }
 
     const data = await resp.json();
