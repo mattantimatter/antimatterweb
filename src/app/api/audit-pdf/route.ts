@@ -81,7 +81,9 @@ export async function POST(request: Request) {
         pdfArrayBuffer.byteOffset + pdfArrayBuffer.byteLength
       );
 
-      return new Response(ab, {
+      // Ensure BodyInit type is a Uint8Array, not (ArrayBuffer | SharedArrayBuffer)
+      const body = new Uint8Array(ab as ArrayBuffer);
+      return new Response(body, {
         status: 200,
         headers: {
           "Content-Type": "application/pdf",
