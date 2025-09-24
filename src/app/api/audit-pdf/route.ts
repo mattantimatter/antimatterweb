@@ -3,6 +3,11 @@ import fs from "node:fs";
 import path from "node:path";
 import puppeteer from "puppeteer";
 
+// Ensure this runs on the Node.js runtime in Vercel/Next
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
+
 export async function POST(request: Request) {
   // Generate a branded PDF from provided HTML content
   try {
