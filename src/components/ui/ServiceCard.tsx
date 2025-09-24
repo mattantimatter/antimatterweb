@@ -85,7 +85,7 @@ const ServiceCard = (props: ServiceCardProps) => {
                   <div>
                     <h3 className="text-foreground/60 text-lg">Tools</h3>
                     {props.toolIcons && props.toolIcons.length > 0 ? (
-                      <div className="grid grid-cols-3 gap-x-5 gap-y-4 pt-1">
+                      <div className="grid grid-cols-3 gap-x-4 gap-y-3 pt-1">
                         {props.toolIcons.map((IconNode, index) => (
                           <span
                             key={index}

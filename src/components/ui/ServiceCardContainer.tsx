@@ -1,7 +1,7 @@
 "use client";
 import ServiceCard, { ServiceCardProps } from "./ServiceCard";
 import { useActiveIndex } from "@/store";
-import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract } from "react-icons/si";
+import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract, SiReact, SiFlutter, SiNextdotjs, SiNodedotjs, SiDocker, SiTypescript } from "react-icons/si";
 
 const ServiceCardContainer = () => {
   const activeIndex = useActiveIndex((state) => state.activeIndex);
@@ -46,13 +46,22 @@ const serviceCardData: ServiceCardProps[] = [
     number: "02",
     title: "Development",
     description:
-      "Building robust and scalable applications tailored to your needs.",
+      "Robust, scalable products across web and mobile—from elegant UIs to reliable APIs and automated DevOps.",
     services: [
-      "Frontend Development",
-      "Backend Development",
-      "Full-Stack Development",
+      "Frontend Platforms (React / Next)",
+      "Backend APIs & Microservices (Node)",
+      "Mobile & Cross‑platform (Flutter)",
+      "CI/CD & Cloud Ops (Docker)",
     ],
-    tools: ["React", "Node.js", "Django"],
+    tools: ["React", "Flutter", "Next.js", "Node.js", "Docker", "TypeScript"],
+    toolIcons: [
+      <SiReact key="react" />,
+      <SiFlutter key="flutter" />,
+      <SiNextdotjs key="next" />,
+      <SiNodedotjs key="node" />,
+      <SiDocker key="docker" />,
+      <SiTypescript key="ts" />,
+    ],
   },
   {
     number: "03",
