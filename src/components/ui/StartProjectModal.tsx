@@ -163,7 +163,7 @@ export default function StartProjectModal() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 lg:gap-6 p-4 sm:p-6 overflow-y-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 lg:gap-6 p-4 sm:p-6">
           <form className="lg:col-span-2 flex flex-col gap-3 sm:gap-4" onSubmit={onAnalyze}>
             <div className="flex flex-col gap-2">
               <label className="text-xs uppercase tracking-wide opacity-70">Current website URL</label>
@@ -228,7 +228,7 @@ export default function StartProjectModal() {
             )}
           </form>
 
-          <div className="lg:col-span-3 border-t lg:border-t-0 lg:border-l border-white/10 mt-4 lg:mt-0 pt-4 lg:pt-0 lg:pl-6 min-h-[220px]">
+          <div className="lg:col-span-3 border-t lg:border-t-0 lg:border-l border-white/10 mt-4 lg:mt-0 pt-4 lg:pt-0 lg:pl-6 min-h-[220px] max-h-[70vh] overflow-y-auto pr-2">
             {!result && !submitting && (
               <div className="opacity-70 text-sm">
                 Enter your site URL to get an AI-driven audit with prioritized recommendations across UI/UX, SEO, performance, and platform fit.
@@ -239,7 +239,10 @@ export default function StartProjectModal() {
             )}
             {result?.html && (
               <>
-                <article className="prose prose-invert max-w-none [&_*]:text-foreground/90" dangerouslySetInnerHTML={{ __html: result.html }} />
+                <article
+                  className="max-w-none text-sm leading-7 [&_*]:text-foreground/90 [&_h2]:text-xl [&_h2]:mt-6 [&_h2]:mb-2 [&_h3]:text-lg [&_h3]:mt-4 [&_h3]:mb-1 [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-6 [&_li]:my-1.5 [&_strong]:font-semibold"
+                  dangerouslySetInnerHTML={{ __html: result.html }}
+                />
                 <div className="mt-4 flex flex-wrap gap-3">
                   <button onClick={onDownload} className="h-10 px-4 rounded-lg bg-white/10 hover:bg-white/15">
                     Download HTML
