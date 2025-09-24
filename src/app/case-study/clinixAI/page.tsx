@@ -1,6 +1,13 @@
 import CaseStudy from "../component/CaseStudy";
 import Reveal from "@/components/ui/Reveal";
 import Image from "next/image";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Clinix AI Case Study",
+  description:
+    "Clinix AI: Ambient clinical note generation, ICD/CPT automation, and EHR integration.",
+};
 
 const CaseStudyPage = () => {
   return (
@@ -46,7 +53,7 @@ const KeyStatsGrid = () => {
       <Reveal viewAmount={0} className="col-span-4 row-span-5">
         <Image
           src={"/images/CaseStudies/clinix/clinixai-2.jpg"}
-          alt=""
+          alt="Clinix AI interface view 1"
           width={440}
           height={444}
           className="w-full h-full object-cover rounded-2xl object-top-left"
@@ -72,7 +79,7 @@ const KeyStatsGrid = () => {
       >
         <Image
           src={"/images/CaseStudies/clinix/clinixai-4.jpg"}
-          alt=""
+          alt="Clinix AI interface view 2"
           width={440}
           height={260}
           className="w-full h-full object-cover rounded-2xl"
@@ -120,7 +127,7 @@ const KeyStatsGrid = () => {
       >
         <Image
           src={"/images/CaseStudies/clinix/clinixai-3.jpg"}
-          alt=""
+          alt="Clinix AI interface view 3"
           width={322}
           height={258}
           className="w-full h-full object-cover rounded-2xl"

@@ -8,6 +8,13 @@ import Loading from "@/components/ui/Loading";
 import MainLayout from "@/components/ui/MainLayout";
 import WorkSection from "@/components/WorkSection";
 import Interactions from "@/utils/interactions";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Home",
+  description:
+    "Antimatter AI designs and builds high-impact AI products, secure platforms, and modern web experiences.",
+};
 
 export default function Home() {
   return (

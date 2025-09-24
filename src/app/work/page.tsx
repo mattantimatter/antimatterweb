@@ -1,5 +1,11 @@
 import MainLayout from "@/components/ui/MainLayout";
 import WorkComponent from "./WorkComponent";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Work",
+  description: "Selected case studies and recent projects by Antimatter AI.",
+};
 
 const WorkData = [
   {

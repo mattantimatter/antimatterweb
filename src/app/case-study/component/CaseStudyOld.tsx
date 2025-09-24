@@ -129,7 +129,7 @@ const CaseStudy = () => {
               {" "}
               <Image
                 src={"/images/CaseStudies/clinix/clinixai-2.jpg"}
-                alt=""
+                alt="Clinix AI interface view 1"
                 width={440}
                 height={444}
                 className="w-full h-full object-cover rounded-2xl object-top-left"
@@ -159,7 +159,7 @@ const CaseStudy = () => {
               {" "}
               <Image
                 src={"/images/CaseStudies/clinix/clinixai-4.jpg"}
-                alt=""
+                alt="Clinix AI interface view 2"
                 width={440}
                 height={260}
                 className="w-full h-full object-cover rounded-2xl"
@@ -218,7 +218,7 @@ const CaseStudy = () => {
               {" "}
               <Image
                 src={"/images/CaseStudies/clinix/clinixai-3.jpg"}
-                alt=""
+                alt="Clinix AI interface view 3"
                 width={322}
                 height={258}
                 className="w-full h-full object-cover rounded-2xl"
@@ -232,7 +232,7 @@ const CaseStudy = () => {
             {" "}
             <Image
               src={"/images/CaseStudies/clinix/clinix-5.jpg"}
-              alt=""
+              alt="Clinix AI pitch deck slide 5"
               width={880}
               height={660}
               className="w-full h-auto rounded-2xl shadow-lg"
@@ -245,7 +245,7 @@ const CaseStudy = () => {
             {" "}
             <Image
               src={"/images/CaseStudies/clinix/clinix-6.jpg"}
-              alt=""
+              alt="Clinix AI pitch deck slide 6"
               width={880}
               height={660}
               className="w-full h-auto rounded-2xl shadow-lg"
@@ -255,7 +255,7 @@ const CaseStudy = () => {
             {" "}
             <Image
               src={"/images/CaseStudies/clinix/clinix-7.jpg"}
-              alt=""
+              alt="Clinix AI pitch deck slide 7"
               width={880}
               height={660}
               className="w-full h-auto rounded-2xl shadow-lg"
@@ -268,7 +268,7 @@ const CaseStudy = () => {
             {" "}
             <Image
               src={"/images/CaseStudies/clinix/clinix-8.jpg"}
-              alt=""
+              alt="Clinix AI pitch deck slide 8"
               width={880}
               height={660}
               className="w-full h-auto rounded-2xl shadow-lg"

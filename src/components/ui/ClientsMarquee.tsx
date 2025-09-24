@@ -67,7 +67,13 @@ const ClientsMarquee: React.FC = () => {
             stroke="transparent"
           />
           {logos.map((src) => (
-            <image key={src} href={src} width="120" height="60" />
+            <image
+              key={src}
+              href={src}
+              width="120"
+              height="60"
+              aria-label={`Client logo ${src.split("/").pop()?.split(".")[0]}`}
+            />
           ))}
         </svg>
         <Image

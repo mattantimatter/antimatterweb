@@ -3,6 +3,13 @@ import MainLayout from "@/components/ui/MainLayout";
 import NavButton from "@/components/ui/NavButton";
 import TitleH1Anim from "@/components/ui/TitleH1Anim";
 import TransitionContainer from "@/components/ui/TransitionContainer";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Get in touch with Antimatter AI to discuss your next AI or product initiative.",
+};
 
 const ContactPage = () => {
   return (
