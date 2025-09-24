@@ -65,11 +65,16 @@ const serviceCardData: ServiceCardProps[] = [
   },
   {
     number: "03",
-    title: "Marketing",
+    title: "GTM Strategy",
     description:
-      "Crafting strategies that drive growth and enhance brand visibility.",
-    services: ["SEO", "Content Marketing", "Social Media Management"],
-    tools: ["Google Analytics", "SEMrush", "Hootsuite"],
+      "Data-driven go-to-market for SaaS and AI—clear positioning, smart pricing, and repeatable growth loops from ICP to post‑launch analytics.",
+    services: [
+      "ICP & Segmentation",
+      "Positioning, Narrative & Messaging",
+      "Pricing & Packaging",
+      "Demand Gen & Content Engine",
+    ],
+    tools: ["HubSpot", "Salesforce", "Google Analytics", "Mixpanel", "Intercom", "Zapier"],
   },
   {
     number: "04",
