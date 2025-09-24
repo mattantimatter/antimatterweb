@@ -56,90 +56,86 @@ export async function POST(request: Request) {
 
     const { snippet, headers, fetchMs } = await fetchHtmlSnippet(normalized);
 
-    const messages = [
-      {
-        role: "system",
-        content:
-          "You are a principal web architect at Antimatter AI. Analyze a public website and produce a personalized, prioritized audit for a business stakeholder. Return strictly semantic HTML (no markdown, no code fences). Use <h2>, <h3>, <p>, <ul>, <li>, and <strong> tags with generous spacing and readable structure. The report must include these sections, in order:\n\n<h2>Overview</h2> (business/UX intent and who the site serves)\n<h2>UI/UX Improvements</h2> (layout, hierarchy, visual design, readability, mobile, motion)\n<h2>Navigation & IA</h2> (menu clarity, information architecture, findability, internal linking)\n<h2>Conversion Optimization</h2> (value propositions, social proof, CTAs, forms, friction removals, experiment ideas)\n<h2>Technical Performance</h2> (Core Web Vitals hypotheses, render path, images/fonts, caching/CDN)\n<h2>Accessibility</h2> (color contrast, focus states, semantics, keyboard, ARIA)\n<h2>Platform & Tech Stack</h2> (inferred stack, risks, recommended upgrades)\n<h2>High‑Impact Recommendations</h2> (ordered list of 5–8 specific actions with expected impact)\n\nBe concrete with examples drawn from the snippet. Use short paragraphs and bulleted lists.",
-      },
-      {
-        role: "user",
-        content: `Audience Industry: ${industry || "(unspecified)"}
-Requester: ${name || "(unspecified)"}${title ? ", " + title : ""}
-Target URL: ${normalized}
+    // Compose prompts for separate domains
+    const sharedContext = `Audience Industry: ${industry || "(unspecified)"}\nRequester: ${name || "(unspecified)"}${title ? ", " + title : ""}\nTarget URL: ${normalized}\nFetch Meta: first_byte_ms≈${fetchMs}, headers=${JSON.stringify(
+      headers
+    )}\nWebsite HTML snippet (truncated):\n${snippet}`;
 
-Fetch Meta: first_byte_ms≈${fetchMs}, headers=${JSON.stringify(headers)}
-Website HTML snippet (truncated):\n${snippet}`,
-      },
-    ];
+    const prompts = {
+      seo:
+        "You are an enterprise SEO lead. Return strictly semantic HTML for <section data-part=seo> with <h2>SEO</h2> including: crawl/indexability, metadata, headings, internal linking, schema, image alts, page speed SEO factors, and 6–10 prioritized, specific fixes with example snippets of improved titles/descriptions. Keep paragraphs concise and use <ul><li> for checklists.",
+      ux:
+        "You are a senior product designer. Return strictly semantic HTML for <section data-part=uiux> with <h2>UI/UX</h2> covering hierarchy, readability, layout, visual design, motion, accessibility heuristics, and mobile. Include concrete improvements tied to observed snippet details.",
+      tech:
+        "You are a principal full‑stack architect. Return strictly semantic HTML for <section data-part=tech> with <h2>Platform & Tech Stack</h2> inferred technologies, risks, security considerations, CMS/e‑commerce notes, and recommended upgrades with benefits.",
+      performance:
+        "You are a web performance engineer. Return strictly semantic HTML for <section data-part=perf> with <h2>Technical Performance</h2> focusing on Core Web Vitals hypotheses, render blocking, bundling, images/fonts, caching/CDN. Provide a prioritized remediation plan with estimated impact.",
+      composer:
+        "You are a communications lead. Given separate HTML fragments for SEO, UI/UX, Platform & Tech Stack, and Technical Performance, compose a single cohesive, branded audit article. Return strictly semantic HTML only: wrap in <article> with sections in this order: Overview (short), UI/UX, SEO, Technical Performance, Platform & Tech Stack, High‑Impact Recommendations (aggregate top 6–10 actions with expected impact and difficulty). Do not duplicate content; keep it crisp and readable.",
+    } as const;
 
-    // Prefer configured model; fall back to stable, widely available models.
-    // Avoid defaulting to unreleased models which can cause 404/unsupported-model errors.
     const preferredModel = process.env.OPENAI_MODEL;
     const fallbackModel = process.env.OPENAI_FALLBACK_MODEL;
-    const candidates: string[] = [
-      preferredModel,
-      fallbackModel,
-      "gpt-4o-mini",
-      "gpt-4o",
-    ].filter(Boolean) as string[];
+    const candidates: string[] = [preferredModel, fallbackModel, "gpt-4o-mini", "gpt-4o"].filter(Boolean) as string[];
 
-    async function callOpenAI(model: string) {
+    async function chat(model: string, systemPrompt: string, user: string) {
       const controller = new AbortController();
-      const timeoutMs = Number(process.env.OPENAI_TIMEOUT_MS || 30000);
-      const timeout = setTimeout(() => controller.abort(), timeoutMs);
+      const timeoutMs = Number(process.env.OPENAI_TIMEOUT_MS || 35000);
+      const to = setTimeout(() => controller.abort(), timeoutMs);
       try {
-        return await fetch("https://api.openai.com/v1/chat/completions", {
+        const r = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${apiKey}`,
             "User-Agent": "AntimatterAI-SiteAudit/1.0",
           },
-          body: JSON.stringify({
-            model,
-            messages,
-            temperature: 0.3,
-          }),
+          body: JSON.stringify({ model, temperature: 0.3, messages: [{ role: "system", content: systemPrompt }, { role: "user", content: user }] }),
           signal: controller.signal,
         });
+        if (!r.ok) throw new Error(`${r.status} ${r.statusText}: ${await r.text()}`);
+        const data = await r.json();
+        return String(data?.choices?.[0]?.message?.content || "");
       } finally {
-        clearTimeout(timeout);
+        clearTimeout(to);
       }
     }
 
-    let resp: Response | null = null;
-    let lastErrorText = "";
-    for (const model of candidates) {
+    // Try each model; use the first that succeeds for all calls
+    let modelInUse: string | null = null;
+    let lastErr = "";
+    for (const m of candidates) {
       try {
-        const r = await callOpenAI(model);
-        if (r.ok) {
-          resp = r;
-          break;
-        }
-        lastErrorText = await r.text();
+        // Probe with a lightweight call to ensure model works
+        await chat(m, "You are healthy.", "Reply with OK in HTML only: <p>OK</p>");
+        modelInUse = m;
+        break;
       } catch (e: any) {
-        lastErrorText = String(e?.message || e);
+        lastErr = String(e?.message || e);
       }
     }
-    if (!resp) {
-      return NextResponse.json(
-        { error: "OpenAI error", details: lastErrorText.slice(0, 800) },
-        { status: 502 }
-      );
+    if (!modelInUse) {
+      return NextResponse.json({ error: "OpenAI error", details: lastErr.slice(0, 800) }, { status: 502 });
     }
 
-    if (!resp.ok) {
-      const err = await resp.text();
-      return NextResponse.json(
-        { error: "OpenAI error", details: `status=${resp.status} ${resp.statusText} – ${err}`.slice(0, 800) },
-        { status: 502 }
-      );
-    }
+    // Run domain prompts in parallel
+    const [seoHtml, uxHtml, techHtml, perfHtml] = await Promise.all([
+      chat(modelInUse, prompts.seo, sharedContext),
+      chat(modelInUse, prompts.ux, sharedContext),
+      chat(modelInUse, prompts.tech, sharedContext),
+      chat(modelInUse, prompts.performance, sharedContext),
+    ]);
 
-    const data = await resp.json();
-    const text = data?.choices?.[0]?.message?.content || "No response.";
-    return NextResponse.json({ result: text });
+    // Compose final article
+    const composed = await chat(
+      modelInUse,
+      prompts.composer,
+      `Fragments:\n\n[SEO]\n${seoHtml}\n\n[UIUX]\n${uxHtml}\n\n[TECH]\n${techHtml}\n\n[PERF]\n${perfHtml}`
+    );
+
+    // Ensure result is wrapped for downstream consumers
+    const resultHtml = composed?.includes("<article") ? composed : `<article>${composed}</article>`;
+    return NextResponse.json({ result: resultHtml, parts: { seo: seoHtml, uiux: uxHtml, tech: techHtml, performance: perfHtml } });
   } catch (e) {
     return NextResponse.json({ error: "Unexpected server error" }, { status: 500 });
   }

@@ -43,3 +43,21 @@
     font-size: 16px;
   }
 }
+
+/* Fluid hover animation for primary CTA in modal */
+.fluidBtn {
+  --ring: rgba(255,255,255,0.25);
+  transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, background .35s ease;
+  box-shadow: 0 0 0 0 var(--ring) inset;
+}
+.fluidBtn:hover,
+.fluidBtn:focus-visible {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow:
+    0 0 0 2px var(--ring) inset,
+    0 10px 30px -10px rgba(0,0,0,.45);
+}
+.fluidBtn:active {
+  transform: translateY(0) scale(.995);
+  box-shadow: 0 0 0 3px var(--ring) inset;
+}

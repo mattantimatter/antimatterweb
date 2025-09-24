@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
+import styles from "./css/Button.module.css";
 import { useStartProjectModal } from "@/store";
 
 type AnalysisResult = {
@@ -40,6 +41,32 @@ export default function StartProjectModal() {
 
   function close() {
     setOpen(false);
+  }
+
+  async function onExportPdf() {
+    if (!result?.html) return;
+    try {
+      setSubmitting(true);
+      const resp = await fetch("/api/audit-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ html: result.html, title: `Website Audit for ${websiteUrl}` }),
+      });
+      if (!resp.ok) throw new Error("Export failed");
+      const blob = await resp.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Antimatter-Website-Audit.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      setError("Failed to export PDF. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   useEffect(() => {
@@ -191,7 +218,7 @@ export default function StartProjectModal() {
             <button
               type="submit"
               disabled={!canSubmit || submitting}
-              className="mt-2 sm:mt-4 h-11 rounded-xl bg-foreground text-background disabled:opacity-60 disabled:cursor-not-allowed"
+              className={`mt-2 sm:mt-4 h-11 rounded-xl bg-foreground text-background disabled:opacity-60 disabled:cursor-not-allowed ${styles.fluidBtn}`}
             >
               {submitting ? "Analyzing…" : "Analyze my site"}
             </button>
@@ -216,6 +243,9 @@ export default function StartProjectModal() {
                 <div className="mt-4 flex flex-wrap gap-3">
                   <button onClick={onDownload} className="h-10 px-4 rounded-lg bg-white/10 hover:bg-white/15">
                     Download HTML
+                  </button>
+                  <button onClick={onExportPdf} className="h-10 px-4 rounded-lg bg-white/10 hover:bg-white/15">
+                    Download PDF
                   </button>
                   <button onClick={onEmailSend} disabled={!email || submitting} className="h-10 px-4 rounded-lg bg-white/10 hover:bg-white/15 disabled:opacity-60">
                     Email Report
