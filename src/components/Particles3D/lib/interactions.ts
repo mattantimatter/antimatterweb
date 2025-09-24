@@ -101,21 +101,18 @@ export function setupInteractions(
     );
 
     const cardElements = gsap.utils.toArray(".service-card") as HTMLElement[];
-    const timeline2 = gsap.timeline({
-      scrollTrigger: (self => {
-        // Disable pinning/horizontal scroll animation on phones for better UX
-        const isTabletUp = window.matchMedia("(min-width: 1024px)").matches;
-        if (!isTabletUp) return undefined as unknown as ScrollTrigger.Vars;
-        return {
+    const isTabletUpForScroll = window.matchMedia("(min-width: 1024px)").matches;
+    const scrollTriggerCards: ScrollTrigger.Vars | undefined = isTabletUpForScroll
+      ? {
           trigger: "#services",
           start: "center center",
           end: "+=3000",
           pinSpacing: true,
           pin: true,
           scrub: true,
-        } as ScrollTrigger.Vars;
-      }) as unknown as ScrollTrigger.Vars,
-    });
+        }
+      : undefined;
+    const timeline2 = gsap.timeline({ scrollTrigger: scrollTriggerCards });
 
     const pauseDuration = 0.5;
 
@@ -155,18 +152,16 @@ export function setupInteractions(
       });
     }
 
-    const timeline3 = gsap.timeline({
-      scrollTrigger: (self => {
-        const isTabletUp = window.matchMedia("(min-width: 1024px)").matches;
-        if (!isTabletUp) return undefined as unknown as ScrollTrigger.Vars;
-        return {
+    const isTabletUpForExit = window.matchMedia("(min-width: 1024px)").matches;
+    const scrollTriggerExit: ScrollTrigger.Vars | undefined = isTabletUpForExit
+      ? {
           trigger: "#service-section",
           start: "bottom bottom",
           scrub: true,
           invalidateOnRefresh: true,
-        } as ScrollTrigger.Vars;
-      }) as unknown as ScrollTrigger.Vars,
-    });
+        }
+      : undefined;
+    const timeline3 = gsap.timeline({ scrollTrigger: scrollTriggerExit });
 
     if (window.matchMedia("(min-width: 1024px)").matches) {
       timeline3.to("#particles3d", {
