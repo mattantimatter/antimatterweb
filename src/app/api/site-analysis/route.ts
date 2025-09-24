@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 
+// Ensure Node runtime on Vercel for external fetch + timeouts
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
+
 async function fetchHtmlSnippet(url: string): Promise<{ snippet: string; headers: Record<string, string>; fetchMs: number }> {
   try {
     const start = Date.now();
@@ -101,13 +106,14 @@ export async function POST(request: Request) {
       }
     }
 
-    // Try each model; use the first that succeeds for all calls
+    // Pick the first model that successfully answers the SEO prompt,
+    // then reuse that model for the remaining prompts.
     let modelInUse: string | null = null;
+    let seoHtml = "";
     let lastErr = "";
     for (const m of candidates) {
       try {
-        // Probe with a lightweight call to ensure model works
-        await chat(m, "You are healthy.", "Reply with OK in HTML only: <p>OK</p>");
+        seoHtml = await chat(m, prompts.seo, sharedContext);
         modelInUse = m;
         break;
       } catch (e: any) {
@@ -118,9 +124,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "OpenAI error", details: lastErr.slice(0, 800) }, { status: 502 });
     }
 
-    // Run domain prompts in parallel
-    const [seoHtml, uxHtml, techHtml, perfHtml] = await Promise.all([
-      chat(modelInUse, prompts.seo, sharedContext),
+    // Run remaining prompts in parallel using the selected model
+    const [uxHtml, techHtml, perfHtml] = await Promise.all([
       chat(modelInUse, prompts.ux, sharedContext),
       chat(modelInUse, prompts.tech, sharedContext),
       chat(modelInUse, prompts.performance, sharedContext),
