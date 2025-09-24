@@ -1,7 +1,7 @@
 "use client";
 import ServiceCard, { ServiceCardProps } from "./ServiceCard";
 import { useActiveIndex } from "@/store";
-import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract, SiReact, SiFlutter, SiNextdotjs, SiNodedotjs, SiDocker, SiTypescript } from "react-icons/si";
+import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract, SiReact, SiFlutter, SiNextdotjs, SiNodedotjs, SiDocker, SiTypescript, SiHubspot, SiSalesforce, SiGoogleanalytics, SiMixpanel, SiIntercom, SiZapier } from "react-icons/si";
 
 const ServiceCardContainer = () => {
   const activeIndex = useActiveIndex((state) => state.activeIndex);
@@ -75,6 +75,14 @@ const serviceCardData: ServiceCardProps[] = [
       "Demand Gen & Content Engine",
     ],
     tools: ["HubSpot", "Salesforce", "Google Analytics", "Mixpanel", "Intercom", "Zapier"],
+    toolIcons: [
+      <SiHubspot key="hubspot" />,
+      <SiSalesforce key="salesforce" />,
+      <SiGoogleanalytics key="ga" />,
+      <SiMixpanel key="mixpanel" />,
+      <SiIntercom key="intercom" />,
+      <SiZapier key="zapier" />,
+    ],
   },
   {
     number: "04",
