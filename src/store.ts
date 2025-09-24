@@ -21,3 +21,11 @@ export const useActiveIndex = create<{
   activeIndex: 0,
   setActiveIndex: (index: number) => set({ activeIndex: index }),
 }));
+
+export const useStartProjectModal = create<{
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}>((set) => ({
+  open: false,
+  setOpen: (open: boolean) => set({ open }),
+}));

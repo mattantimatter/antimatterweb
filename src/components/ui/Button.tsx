@@ -2,7 +2,7 @@
 import { MouseEvent, PropsWithChildren } from "react";
 import styles from "./css/Button.module.css";
 
-const Button = ({ children }: PropsWithChildren) => {
+const Button = ({ children, ...props }: PropsWithChildren & React.ComponentProps<"button">) => {
   function handleMouseMove(e: MouseEvent<HTMLButtonElement>) {
     const el = e.currentTarget;
     const rect = el.getBoundingClientRect();
@@ -14,6 +14,7 @@ const Button = ({ children }: PropsWithChildren) => {
       type="button"
       className={styles.button}
       onMouseMove={handleMouseMove}
+      {...props}
     >
       {children}
     </button>

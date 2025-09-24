@@ -1,11 +1,13 @@
 "use client";
 import { animate, AnimatePresence, motion } from "motion/react";
 import Button from "./Button";
+import { useStartProjectModal } from "@/store";
 import { useLoading } from "@/store";
 import Counter from "./bits/Counter";
 import { useEffect, useState } from "react";
 
 const HeroComponent = () => {
+  const { setOpen } = useStartProjectModal();
   const finished = useLoading((s) => s.finished);
   const [projects, setProjects] = useState(0);
   const [satisfaction, setSatisfaction] = useState(0);
@@ -93,7 +95,7 @@ const HeroComponent = () => {
                   We empower organizations with AI that turns complex challenges into real outcomes.
                 </p>
                 <div className="flex text-lg">
-                  <Button>Start Your Project</Button>
+                  <Button onClick={() => setOpen(true)}>Start Your Project</Button>
                 </div>
               </div>
               <div className="flex text-sm mobile:gap-10 lg:gap-16 sm:justify-center md:justify-end justify-between w-full">

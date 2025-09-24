@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import NavButton from "./ui/NavButton";
+import { useStartProjectModal } from "@/store";
 import NavLinksBg from "./ui/NavLinksBg";
 import { useLoading } from "@/store";
 import { motion } from "motion/react";
@@ -21,6 +22,7 @@ const NavData: NavItem[] = [
 const NavBar = () => {
   const finished = useLoading((s) => s.finished);
   const path = usePathname();
+  const { setOpen } = useStartProjectModal();
   if (path === "/" && !finished) return null;
 
   return (
@@ -54,7 +56,7 @@ const NavBar = () => {
             </ul>
           </nav>
 
-          <NavButton className="hidden md:block" />
+          <NavButton className="hidden md:block" onClick={() => setOpen(true)} />
           <HamMenu navData={NavData} />
         </div>
       </div>
