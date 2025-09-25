@@ -7,7 +7,7 @@ const ServiceCardContainer = () => {
   const activeIndex = useActiveIndex((state) => state.activeIndex);
   return (
     <div
-      className="flex flex-col gap-8 sm:gap-10 lg:flex-row lg:gap-0"
+      className="flex flex-col gap-8 sm:gap-10 lg:flex-row lg:gap-0 w-full max-w-[100vw] px-4 lg:px-0 overflow-x-hidden"
       id="service-cards"
     >
       {serviceCardData.map((card, index) => (

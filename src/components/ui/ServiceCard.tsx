@@ -77,9 +77,9 @@ const ServiceCard = (props: ServiceCardProps) => {
   }, [props.active]);
 
   return (
-    <div ref={cardRootRef} className="service-card w-full lg:w-auto">
+    <div ref={cardRootRef} className="service-card w-full max-w-[100vw] lg:w-auto">
       <div
-        className={`p-[1px] grow shrink-0 relative border border-zinc-700 overflow-hidden rounded-3xl w-full h-auto min-h-[360px] lg:w-[300px] lg:h-[350px] xl:w-[340px] xl:h-[380px] 2xl:w-[420px] 2xl:h-[480px] ${bgcolor} duration-300 scale-100 ${
+        className={`p-[1px] grow shrink-0 relative border border-zinc-700 overflow-hidden rounded-3xl w-full max-w-[100vw] h-auto min-h-[360px] lg:w-[300px] lg:h-[350px] xl:w-[340px] xl:h-[380px] 2xl:w-[420px] 2xl:h-[480px] ${bgcolor} duration-300 scale-100 ${
           props.active ? "lg:scale-100" : "lg:scale-90"
         }`}
       >
