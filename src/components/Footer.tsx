@@ -33,12 +33,12 @@ const Footer = () => {
             <div>
               <h2 className="text-foreground/50 mb-2">Services</h2>
               <div className="flex flex-col gap-2">
-                <Link href={"/"}>Web Development</Link>
-                <Link href={"/"}>AI Solutions</Link>
-                <Link href={"/"}>Design Agency</Link>
-                <Link href={"/"}>Digital marketing</Link>
-                <Link href={"/"}>Web3 Development</Link>
-                <Link href={"/"}>Security Solutions</Link>
+                <Link href={"/design-agency"}>Product Design</Link>
+                <Link href={"/development-agency"}>Development</Link>
+                <Link href={"/gtm-strategy"}>GTM Strategy</Link>
+                <Link href={"/healthcare-apps"}>Healthcare Apps</Link>
+                <Link href={"/ai-development"}>AI Development</Link>
+                <Link href={"/iot-development"}>IoT Development</Link>
               </div>
             </div>
             <div>
