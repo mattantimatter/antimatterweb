@@ -1,7 +1,7 @@
 "use client";
 import ServiceCard, { ServiceCardProps } from "./ServiceCard";
 import { useActiveIndex } from "@/store";
-import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract, SiReact, SiFlutter, SiNextdotjs, SiNodedotjs, SiDocker, SiTypescript, SiHubspot, SiSalesforce, SiGoogleanalytics, SiMixpanel, SiIntercom, SiZapier, SiAmazonaws, SiMicrosoftazure, SiGooglecloud } from "react-icons/si";
+import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract, SiReact, SiFlutter, SiNextdotjs, SiNodedotjs, SiDocker, SiTypescript, SiHubspot, SiSalesforce, SiGoogleanalytics, SiMixpanel, SiIntercom, SiZapier } from "react-icons/si";
 
 const ServiceCardContainer = () => {
   const activeIndex = useActiveIndex((state) => state.activeIndex);
@@ -98,11 +98,7 @@ const serviceCardData: ServiceCardProps[] = [
       "EHR Integrations (FHIR / HL7)",
       "Audit Logging & Access Controls",
     ],
-    toolIcons: [
-      <SiAmazonaws key="aws" />,
-      <SiMicrosoftazure key="azure" />,
-      <SiGooglecloud key="gcp" />,
-    ],
+    tools: ["AWS", "Azure", "Google Cloud"],
   },
   {
     number: "05",
