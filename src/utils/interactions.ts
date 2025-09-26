@@ -55,15 +55,14 @@ const Interactions = () => {
         { opacity: 1, scale: 1, duration: 2.5, delay: 0.8, ease: "back.out" },
         0
       );
-      // Fade out particles when entering Work (Case Studies) so they don't linger at top
-      gsap.to("#particles3d", {
-        opacity: 0,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: "#work-section",
-          start: "top bottom",
-          end: "top 85%",
-          scrub: true,
+      // Fade out particles when entering Work (Case Studies), and restore on scroll-up
+      ScrollTrigger.create({
+        trigger: "#work-section",
+        start: "top bottom",
+        end: "top 85%",
+        scrub: true,
+        onUpdate: (self) => {
+          gsap.to("#particles3d", { opacity: 1 - self.progress, overwrite: "auto" });
         },
       });
 
