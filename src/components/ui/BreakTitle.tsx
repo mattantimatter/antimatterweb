@@ -21,23 +21,20 @@ export default function BreakTitle({ text, align = "left", className = "" }: Bre
     gsap.registerPlugin(ScrollTrigger);
     const targets = containerRef.current.querySelectorAll("span[data-word]");
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        targets,
-        { y: 28, opacity: 0, rotateX: -18 },
-        {
-          y: 0,
-          opacity: 1,
-          rotateX: 0,
-          duration: 1.0,
-          ease: "power3.out",
-          stagger: 0.12,
-          scrollTrigger: {
-            trigger: containerRef.current!,
-            start: "top 85%",
-            once: true,
-          },
-        }
-      );
+      gsap.to(targets, {
+        y: 0,
+        opacity: 1,
+        rotateX: 0,
+        force3D: true,
+        duration: 1.0,
+        ease: "power3.out",
+        stagger: 0.12,
+        scrollTrigger: {
+          trigger: containerRef.current!,
+          start: "top 85%",
+          once: true,
+        },
+      });
     }, containerRef);
     return () => ctx.revert();
   }, []);
@@ -52,7 +49,12 @@ export default function BreakTitle({ text, align = "left", className = "" }: Bre
     >
       <span className={`inline-flex flex-wrap ${justify} gap-x-2 gap-y-1`}>
         {words.map((w, i) => (
-          <span key={`${w}-${i}`} data-word className="inline-block will-change-transform">
+          <span
+            key={`${w}-${i}`}
+            data-word
+            className="inline-block will-change-transform opacity-0"
+            style={{ transform: "translateY(28px) rotateX(-18deg)" }}
+          >
             {w}
           </span>
         ))}
