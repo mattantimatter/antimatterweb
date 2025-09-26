@@ -123,13 +123,13 @@ const NavItemWithDropdown = ({
 const ServiceCard = ({ icon: Icon, title, items, link }: ServiceProps) => (
   <Link
     href={link}
-    className="p-4 hover:bg-white/5 rounded-lg border border-transparent hover:border-white/5 transition pl-14 relative block h-full min-h-[220px] max-h-[260px] overflow-hidden"
+    className="p-5 hover:bg-white/5 rounded-lg border border-transparent hover:border-white/5 transition pl-14 relative block h-full min-h-[230px] max-h-[280px] overflow-hidden"
   >
     <div className="absolute top-5 left-3 text-accent">
       <Icon className="size-7" />
     </div>
-    <h3 className="text-xl font-semibold mb-2">{title}</h3>
-    <div className="flex flex-col gap-[1px] opacity-70 text-pretty">
+    <h3 className="text-xl font-semibold mb-2 whitespace-nowrap">{title}</h3>
+    <div className="flex flex-col gap-1.5 opacity-70 text-pretty">
       {items.map((i) => (
         <div key={i.title} className="whitespace-normal">
           {i.title}
@@ -154,16 +154,16 @@ const ServicesDropdown = ({ open }: { open: boolean }) => (
   >
     <div
       className={`
-        w-[740px] lg:w-[1000px] bg-zinc-950 border border-foreground/20 rounded-xl
+        w-[820px] lg:w-[1120px] bg-zinc-950 border border-foreground/20 rounded-xl
         max-w-0 overflow-hidden
         transition-all ease-in-out duration-500
-        ${open ? "max-w-[1000px] duration-700" : ""}
-        group-hover:max-w-[1000px] group-hover:duration-700
+        ${open ? "max-w-[1120px] duration-700" : ""}
+        group-hover:max-w-[1120px] group-hover:duration-700
       `}
     >
       <div
         className={`
-          grid grid-cols-6 lg:grid-cols-9 gap-1 p-2 lg:p-4 w-[740px] lg:w-[1000px] max-h-0 overflow-hidden
+          grid grid-cols-6 lg:grid-cols-9 gap-2 p-3 lg:p-5 w-[820px] lg:w-[1120px] max-h-0 overflow-hidden
           transition-all ease-in-out duration-500
           ${open ? "max-h-[1000px] duration-[1100ms]" : ""}
           group-hover:max-h-[1000px] group-hover:duration-[1100ms]
