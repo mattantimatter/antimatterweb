@@ -55,16 +55,7 @@ const Interactions = () => {
         { opacity: 1, scale: 1, duration: 2.5, delay: 0.8, ease: "back.out" },
         0
       );
-      // Fade particles out as services section enters viewport, but avoid abrupt gaps
-      gsap.to("#particles3d", {
-        opacity: 0,
-        scrollTrigger: {
-          trigger: "#service-section",
-          start: "top 95%",
-          end: "top 70%",
-          scrub: true,
-        },
-      });
+      // Keep hero particles behavior as in earlier build – no early fade
 
       tl1.fromTo(
         title1.chars,
