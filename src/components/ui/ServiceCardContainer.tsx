@@ -1,7 +1,7 @@
 "use client";
 import ServiceCard, { ServiceCardProps } from "./ServiceCard";
 import { useActiveIndex } from "@/store";
-import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract, SiReact, SiFlutter, SiNextdotjs, SiNodedotjs, SiDocker, SiTypescript, SiHubspot, SiSalesforce, SiGoogleanalytics, SiMixpanel, SiIntercom, SiZapier } from "react-icons/si";
+import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract, SiReact, SiFlutter, SiNextdotjs, SiNodedotjs, SiDocker, SiTypescript, SiHubspot, SiSalesforce, SiGoogleanalytics, SiMixpanel, SiIntercom, SiZapier, SiAmazonaws, SiMicrosoftazure, SiGooglecloud } from "react-icons/si";
 
 const ServiceCardContainer = () => {
   const activeIndex = useActiveIndex((state) => state.activeIndex);
@@ -89,14 +89,20 @@ const serviceCardData: ServiceCardProps[] = [
   },
   {
     number: "04",
-    title: "Healthcare Apps/Compliance",
-    description: "Developing secure and compliant healthcare applications.",
+    title: "Healthcare Apps",
+    description:
+      "Secure, compliant healthcare software—from telehealth to EHR integrations—built for HIPAA and auditability.",
     services: [
-      "HIPAA Compliance",
-      "Telemedicine Solutions",
-      "Health Data Management",
+      "HIPAA & PHI Compliance",
+      "Telehealth & Patient Portals",
+      "EHR Integrations (FHIR / HL7)",
+      "Audit Logging & Access Controls",
     ],
-    tools: ["AWS", "Azure", "Google Cloud"],
+    toolIcons: [
+      <SiAmazonaws key="aws" />,
+      <SiMicrosoftazure key="azure" />,
+      <SiGooglecloud key="gcp" />,
+    ],
   },
   {
     number: "05",
