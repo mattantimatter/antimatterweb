@@ -37,7 +37,7 @@ export default function SplitTextWavy({
             className={`inline-block ${letterSpacingClass}`}
             initial={{ y: 0 }}
             animate={{ y: [0, -amplitude, 0, amplitude, 0] }}
-            transition={{ duration, times: [0, 0.25, 0.5, 0.75, 1], ease: "easeInOut", repeat: Infinity, delay: i * stagger }}
+            transition={{ duration, times: [0, 0.25, 0.5, 0.75, 1], ease: "easeInOut", repeat: Infinity, repeatType: "loop", delay: i * stagger }}
           >
             {displayChar}
           </motion.span>
