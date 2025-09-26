@@ -1,5 +1,5 @@
 import React from "react";
-import Title from "./ui/Title";
+import BreakTitle from "./ui/BreakTitle";
 import CaseStudies from "./ui/CaseStudies";
 
 const WorkSection = () => {
@@ -7,7 +7,7 @@ const WorkSection = () => {
     <div className="relative">
       <div className="flex flex-col gap-24 ">
         <div className="flex flex-col md:flex-row justify-between gap-5">
-          <Title>Case studies</Title>
+          <BreakTitle text="Case Studies" />
           <p className="text-left md:text-right font-light">
             Proven results, measurable impact—explore <br /> the transformations
             we&apos;ve delivered.

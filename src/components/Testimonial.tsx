@@ -1,14 +1,11 @@
 import { FaQuoteLeft } from "react-icons/fa";
-import Title from "./ui/Title";
+import BreakTitle from "./ui/BreakTitle";
 
 const Testimonial = () => {
   return (
     <div className="flex flex-col gap-20 2xl:gap-30">
       <div className="flex">
-        <Title>
-          What Our Clients <br />
-          Say About Us
-        </Title>
+        <BreakTitle text="What our clients say about us" />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-12 grid-rows-2 h-auto sm:h-[550px] gap-5 2xl:gap-10">
         <div className="py-8 sm:py-2 col-span-1 sm:col-span-6 md:col-span-5 row-span-2 bg-gradient-to-b from-foreground/5 to-background border border-foreground/15 rounded-2xl flex gap-10 flex-col justify-center px-8 xl:px-14">
