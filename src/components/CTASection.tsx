@@ -12,7 +12,7 @@ const CTASection = () => {
         </h2>
         <Button>
           <span className="sm:text-xl flex items-center gap-5">
-            Let's work together <GoArrowRight className="size-6 sm:size-8" />
+            Let&apos;s work together <GoArrowRight className="size-6 sm:size-8" />
           </span>
         </Button>
       </div>
