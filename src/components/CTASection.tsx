@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "./ui/Button";
 import DarkVeil from "./ui/bits/DarkVeilBG";
+import SplitTextWavy from "./ui/SplitTextWavy";
 import { GoArrowRight } from "react-icons/go";
 
 const CTASection = () => {
@@ -8,7 +9,15 @@ const CTASection = () => {
     <div className="p-5 sm:p-20 md:p-30 pt-28 sm:pt-44 border border-foreground/15 rounded-2xl relative overflow-hidden">
       <div className="relative z-10 pb-10 sm:pb-0">
         <h2 className="text-2xl sm:text-4xl mb-10">
-          We turn bold ideas into powerful digital realities.
+          We turn bold ideas into {" "}
+          <SplitTextWavy
+            text="powerful digital realities."
+            amplitude={8}
+            duration={1.8}
+            stagger={0.05}
+            className="font-semibold"
+            letterSpacingClass="tracking-normal"
+          />
         </h2>
         <Button>
           <span className="sm:text-xl flex items-center gap-5">
