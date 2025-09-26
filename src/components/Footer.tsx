@@ -9,7 +9,6 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row gap-20 md:gap-5 justify-between">
           <div className="flex flex-col font-light text-lg">
             <p className="text-2xl">clients@antimatterai.com</p>
-            <p className="text-2xl">+1 (555) 123-4567</p>
             <div className="flex mt-3">
               <a
                 href=""
@@ -54,7 +53,7 @@ const Footer = () => {
         </div>
         <div className="flex flex-col md:flex-row mt-20 gap-10 md:gap-5 justify-between font-light">
           <p className=" text-foreground/50 text-center">
-            Antimatter AI, © 2024. All rights reserved.
+            Antimatter AI, © 2025. All rights reserved.
           </p>
         </div>
       </div>
