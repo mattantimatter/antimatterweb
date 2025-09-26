@@ -26,6 +26,7 @@ export default function SplitTextWavy({
   letterSpacingClass = "tracking-wide",
 }: Props) {
   const chars = Array.from(text);
+  const totalTravel = Math.max(0, (chars.length - 1) * stagger);
 
   return (
     <span aria-label={text} className={`inline-flex flex-wrap ${className}`} style={{ lineHeight: 1.1 }}>
@@ -37,7 +38,7 @@ export default function SplitTextWavy({
             className={`inline-block ${letterSpacingClass}`}
             initial={{ y: 0 }}
             animate={{ y: [0, -amplitude, 0, amplitude, 0] }}
-            transition={{ duration, times: [0, 0.25, 0.5, 0.75, 1], ease: "easeInOut", repeat: Infinity, repeatType: "loop", delay: i * stagger }}
+            transition={{ duration, times: [0, 0.25, 0.5, 0.75, 1], ease: "easeInOut", repeat: Infinity, repeatType: "loop", delay: i * stagger, repeatDelay: totalTravel }}
           >
             {displayChar}
           </motion.span>

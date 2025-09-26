@@ -13,8 +13,8 @@ const CTASection = () => {
           <SplitTextWavy
             text="powerful digital realities."
             amplitude={8}
-            duration={2.16}
-            stagger={0.05}
+            duration={2.4}
+            stagger={0.06}
             className="font-semibold"
             letterSpacingClass="tracking-normal"
           />
