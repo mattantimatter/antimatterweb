@@ -32,12 +32,7 @@ export default function SplitTextWavy({
     <span aria-label={text} className={`inline-flex flex-wrap ${className}`} style={{ lineHeight: 1.1 }}>
       {chars.map((ch, i) => {
         const displayChar = ch === " " ? "\u00A0" : ch;
-        const isFirstChar = i === 0;
-        const yFrames = isFirstChar
-          // For the first character, never dip below baseline
-          ? [0, -amplitude, -amplitude * 0.5, -amplitude * 0.25, 0]
-          // Others follow a full wave
-          : [0, -amplitude, 0, amplitude, 0];
+        const yFrames = [0, -amplitude, 0, amplitude, 0];
         return (
           <motion.span
             key={i}
