@@ -22,7 +22,7 @@ const ServiceSection = () => {
               </p>
             </div>
           </div>
-          <div className="relative overflow-x-hidden">
+          <div className="relative overflow-hidden lg:overflow-visible">
             <div className="absolute -left-[500px] top-0 h-full w-[500px] bg-gradient-to-r from-background from-75%  to-white/0 z-10"></div>
             <div className="absolute -right-[100px] lg:-right-[300px] wide:hidden block top-0 h-full w-[150px] sm:w-[300px] bg-gradient-to-l from-background from-75%  to-white/0 z-10"></div>
             <ServiceCardContainer />
