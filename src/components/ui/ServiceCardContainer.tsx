@@ -1,7 +1,7 @@
 "use client";
 import ServiceCard, { ServiceCardProps } from "./ServiceCard";
 import { useActiveIndex } from "@/store";
-import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract, SiReact, SiFlutter, SiNextdotjs, SiNodedotjs, SiDocker, SiTypescript, SiHubspot, SiSalesforce, SiGoogleanalytics, SiMixpanel, SiIntercom, SiZapier, SiAmazonwebservices, SiGooglecloud, SiOkta, SiAuth0, SiTwilio, SiStripe, SiTensorflow, SiPytorch, SiScikitlearn, SiKeras, SiHuggingface, SiLangchain } from "react-icons/si";
+import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract, SiReact, SiFlutter, SiNextdotjs, SiNodedotjs, SiDocker, SiTypescript, SiHubspot, SiSalesforce, SiGoogleanalytics, SiMixpanel, SiIntercom, SiZapier, SiAmazonwebservices, SiGooglecloud, SiOkta, SiAuth0, SiTwilio, SiStripe, SiTensorflow, SiPytorch, SiScikitlearn, SiKeras, SiHuggingface, SiLangchain, SiMqtt, SiArduino, SiRaspberrypi, SiNodered, SiZigbee, SiNordicsemiconductor } from "react-icons/si";
 
 const ServiceCardContainer = () => {
   const activeIndex = useActiveIndex((state) => state.activeIndex);
@@ -130,14 +130,22 @@ const serviceCardData: ServiceCardProps[] = [
   },
   {
     number: "06",
-    title: "Cybersecurity",
+    title: "IoT Development",
     description:
-      "Protecting your digital assets with advanced cybersecurity solutions.",
+      "From device firmware to cloud ingestion—secure, reliable IoT systems with OTA updates and real‑time telemetry.",
     services: [
-      "Threat Analysis",
-      "Vulnerability Assessment",
-      "Incident Response",
+      "Embedded Firmware & Drivers",
+      "BLE / Zigbee / LoRa Connectivity",
+      "MQTT Ingestion & Stream Processing",
+      "Edge AI & OTA Update Pipelines",
     ],
-    tools: ["Nessus", "Wireshark", "Metasploit"],
+    toolIcons: [
+      <SiArduino key="arduino" />,
+      <SiRaspberrypi key="raspberrypi" />,
+      <SiMqtt key="mqtt" />,
+      <SiNodered key="nodered" />,
+      <SiZigbee key="zigbee" />,
+      <SiNordicsemiconductor key="nordic" />,
+    ],
   },
 ];
