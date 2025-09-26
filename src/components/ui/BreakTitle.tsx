@@ -23,14 +23,14 @@ export default function BreakTitle({ text, align = "left", className = "" }: Bre
     const ctx = gsap.context(() => {
       gsap.fromTo(
         targets,
-        { y: 24, opacity: 0, rotateX: -15 },
+        { y: 28, opacity: 0, rotateX: -18 },
         {
           y: 0,
           opacity: 1,
           rotateX: 0,
-          duration: 0.6,
-          ease: "power2.out",
-          stagger: 0.04,
+          duration: 1.0,
+          ease: "power3.out",
+          stagger: 0.12,
           scrollTrigger: {
             trigger: containerRef.current!,
             start: "top 85%",
@@ -43,18 +43,20 @@ export default function BreakTitle({ text, align = "left", className = "" }: Bre
   }, []);
 
   const alignClass = align === "center" ? "text-center" : align === "right" ? "text-right" : "text-left";
+  const justify = align === "center" ? "justify-center" : align === "right" ? "justify-end" : "justify-start";
 
   return (
     <h2
       ref={containerRef}
       className={`text-3xl sm:text-title/tight font-semibold leading-tight ${alignClass} ${className}`}
     >
-      {words.map((w, i) => (
-        <span key={`${w}-${i}`} data-word className="inline-block will-change-transform">
-          {w}
-          {i < words.length - 1 ? " " : ""}
-        </span>
-      ))}
+      <span className={`inline-flex flex-wrap ${justify} gap-x-2 gap-y-1`}>
+        {words.map((w, i) => (
+          <span key={`${w}-${i}`} data-word className="inline-block will-change-transform">
+            {w}
+          </span>
+        ))}
+      </span>
     </h2>
   );
 }
