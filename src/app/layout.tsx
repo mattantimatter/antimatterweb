@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Antimatter AI — Digital Solutions That Matter",
     description:
-      "We empower organizations with AI that turns complex challenges into real outcomes.",
+    "We empower organizations with AI that turns complex challenges into real-world outcomes.",
     url: "https://www.antimatterai.com",
     siteName: "Antimatter AI",
     images: [
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Antimatter AI — Digital Solutions That Matter",
     description:
-      "We empower organizations with AI that turns complex challenges into real outcomes.",
+      "We empower organizations with AI that turns complex challenges into real-world outcomes.",
     images: [
       { url: "/opengraph-image", alt: "Antimatter AI homepage" },
       { url: "/images/clientsLightCurve.jpg", alt: "Antimatter AI light curve graphic" },
