@@ -8,12 +8,11 @@ const CTASection = () => {
     <div className="p-5 sm:p-20 md:p-30 pt-28 sm:pt-44 border border-foreground/15 rounded-2xl relative overflow-hidden">
       <div className="relative z-10 pb-10 sm:pb-0">
         <h2 className="text-2xl sm:text-4xl mb-10">
-          We build cool websites <br />{" "}
-          <span className="font-bold italic">You want a cool website</span>
+          We turn bold ideas into powerful digital realities.
         </h2>
         <Button>
           <span className="sm:text-xl flex items-center gap-5">
-            Lets work together <GoArrowRight className="size-6 sm:size-8" />
+            Let's work together <GoArrowRight className="size-6 sm:size-8" />
           </span>
         </Button>
       </div>
