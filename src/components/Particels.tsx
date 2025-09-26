@@ -3,7 +3,7 @@ import Particles3D from "./Particles3D";
 const Particels = () => {
   return (
     <div
-      className="absolute lg:fixed opacity-0 -mt-30 sm:-mt-0 top-1/2 left-1/2 -translate-1/2 size-[500px] sm:size-[700px] 2xl:size-[900px] z-10"
+      className="absolute lg:absolute opacity-0 -mt-30 sm:-mt-0 top-1/2 left-1/2 -translate-1/2 size-[500px] sm:size-[700px] 2xl:size-[900px] z-10 pointer-events-none"
       id="particles3d"
     >
       <div className="relative w-full h-full   2xl:translate-x-0">
