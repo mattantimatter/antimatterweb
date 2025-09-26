@@ -123,15 +123,15 @@ const NavItemWithDropdown = ({
 const ServiceCard = ({ icon: Icon, title, items, link }: ServiceProps) => (
   <Link
     href={link}
-    className="p-4 hover:bg-white/5 rounded-lg border border-transparent hover:border-white/5 transition pl-14 relative block"
+    className="p-4 hover:bg-white/5 rounded-lg border border-transparent hover:border-white/5 transition pl-14 relative block h-full min-h-[220px] max-h-[260px] overflow-hidden"
   >
     <div className="absolute top-5 left-3 text-accent">
       <Icon className="size-7" />
     </div>
     <h3 className="text-xl font-semibold mb-2">{title}</h3>
-    <div className="flex flex-col gap-[1px] opacity-70">
+    <div className="flex flex-col gap-[1px] opacity-70 text-pretty">
       {items.map((i) => (
-        <div key={i.title} className="text-nowrap">
+        <div key={i.title} className="whitespace-normal">
           {i.title}
         </div>
       ))}
