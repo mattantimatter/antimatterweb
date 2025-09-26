@@ -37,13 +37,13 @@ const NavBar = () => {
         <div className="flex justify-between items-center">
           <Link href="/">
             <Image
-              src="/images/AnitimatterAI-Logo.png"
+              src="/images/antimatter-ai-logo.svg"
               width={152}
               height={20}
               alt="Antimatter AI Logo"
               priority
               loading="eager"
-              className="w-32 lg:w-38 h-auto"
+              className="w-36 lg:w-40 h-auto"
             />
           </Link>
 
