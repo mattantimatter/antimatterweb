@@ -111,13 +111,22 @@ const serviceCardData: ServiceCardProps[] = [
     number: "05",
     title: "AI Development",
     description:
-      "Leveraging artificial intelligence to transform your business processes.",
+      "Build production‑ready AI—rapid prototyping to deployed models with solid evals, observability, and safety.",
     services: [
-      "Machine Learning",
-      "Natural Language Processing",
-      "Computer Vision",
+      "LLM Apps & Agents (RAG / Tools)",
+      "Fine‑tuning & Prompt Optimization",
+      "Model Evals, Guardrails & Monitoring",
+      "Vision, NLP & Speech Pipelines",
     ],
-    tools: ["TensorFlow", "PyTorch", "scikit-learn"],
+    toolIcons: [
+      // Frameworks & tools
+      <SiTensorflow key="tensorflow" />,
+      <SiPytorch key="pytorch" />,
+      <SiScikitlearn key="sklearn" />,
+      <SiKeras key="keras" />,
+      <SiHuggingface key="hf" />,
+      <SiLangchain key="langchain" />,
+    ],
   },
   {
     number: "06",
