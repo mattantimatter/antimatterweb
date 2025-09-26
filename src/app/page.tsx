@@ -20,9 +20,7 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <div className="relative h-[0]">
-        <LightRays />
-      </div>
+      <LightRays />
       <MainLayout className="mt-40 sm:mt-60 overflow-x-hidden">
         <ServiceSection />
         <WorkSection />

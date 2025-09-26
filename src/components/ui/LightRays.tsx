@@ -5,7 +5,7 @@ import Image from "next/image";
 const LightRays = () => {
   return (
     <motion.div
-      className="absolute inset-x-0 top-0 h-[120vh] overflow-hidden pointer-events-none"
+      className="absolute inset-0 overflow-hidden pointer-events-none"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 2 }}
