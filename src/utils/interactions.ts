@@ -55,7 +55,17 @@ const Interactions = () => {
         { opacity: 1, scale: 1, duration: 2.5, delay: 0.8, ease: "back.out" },
         0
       );
-      // Keep hero particles behavior as in earlier build – no early fade
+      // Fade out particles when entering Work (Case Studies) so they don't linger at top
+      gsap.to("#particles3d", {
+        opacity: 0,
+        ease: "power1.out",
+        scrollTrigger: {
+          trigger: "#work-section",
+          start: "top bottom",
+          end: "top 85%",
+          scrub: true,
+        },
+      });
 
       tl1.fromTo(
         title1.chars,
