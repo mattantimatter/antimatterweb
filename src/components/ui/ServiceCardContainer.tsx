@@ -1,7 +1,7 @@
 "use client";
 import ServiceCard, { ServiceCardProps } from "./ServiceCard";
 import { useActiveIndex } from "@/store";
-import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract, SiReact, SiFlutter, SiNextdotjs, SiNodedotjs, SiDocker, SiTypescript, SiHubspot, SiSalesforce, SiGoogleanalytics, SiMixpanel, SiIntercom, SiZapier, SiAmazonwebservices, SiGooglecloud, SiOkta, SiAuth0, SiTwilio, SiStripe } from "react-icons/si";
+import { SiFigma, SiSketch, SiAdobexd, SiBlender, SiThreedotjs, SiAbstract, SiReact, SiFlutter, SiNextdotjs, SiNodedotjs, SiDocker, SiTypescript, SiHubspot, SiSalesforce, SiGoogleanalytics, SiMixpanel, SiIntercom, SiZapier, SiAmazonwebservices, SiGooglecloud, SiOkta, SiAuth0, SiTwilio, SiStripe, SiTensorflow, SiPytorch, SiScikitlearn, SiKeras, SiHuggingface, SiLangchain } from "react-icons/si";
 
 const ServiceCardContainer = () => {
   const activeIndex = useActiveIndex((state) => state.activeIndex);
