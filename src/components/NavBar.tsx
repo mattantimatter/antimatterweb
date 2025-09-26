@@ -96,7 +96,8 @@ const NavItemWithDropdown = ({
       <li
         ref={ref}
         className="relative group"
-        onClick={() => setOpen((o) => !o)} // tap-to-toggle
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
       >
         <span className="px-4 lg:px-7 py-1.5 flex cursor-pointer">{text}</span>
         <ServicesDropdown open={open} />
@@ -145,28 +146,25 @@ const ServiceCard = ({ icon: Icon, title, items, link }: ServiceProps) => (
 const ServicesDropdown = ({ open }: { open: boolean }) => (
   <div
     className={`
-      absolute top-full left-1/2 -translate-x-1/2 pt-1
+      absolute top-full left-1/2 -translate-x-1/2 pt-2 mt-2
       opacity-0
-      transition-opacity duration-100 delay-300
-      ${open ? "opacity-100 pointer-events-auto delay-0" : ""}
-      group-hover:opacity-100 group-hover:pointer-events-auto group-hover:delay-0
+      transition-[opacity,max-width,max-height,transform] duration-200
+      ${open ? "opacity-100 pointer-events-auto" : "pointer-events-none"}
     `}
   >
     <div
       className={`
         w-[820px] lg:w-[1120px] bg-zinc-950 border border-foreground/20 rounded-xl
         max-w-0 overflow-hidden
-        transition-all ease-in-out duration-500
-        ${open ? "max-w-[1120px] duration-700" : ""}
-        group-hover:max-w-[1120px] group-hover:duration-700
+        transition-all ease-in-out duration-300
+        ${open ? "max-w-[1120px]" : "max-w-0"}
       `}
     >
       <div
         className={`
           grid grid-cols-6 lg:grid-cols-9 gap-2 p-3 lg:p-5 w-[820px] lg:w-[1120px] max-h-0 overflow-hidden
-          transition-all ease-in-out duration-500
-          ${open ? "max-h-[1000px] duration-[1100ms]" : ""}
-          group-hover:max-h-[1000px] group-hover:duration-[1100ms]
+          transition-all ease-in-out duration-300
+          ${open ? "max-h-[1000px]" : "max-h-0"}
         `}
       >
         <div className="flex-col gap-2 col-span-3 py-4 px-3 hidden lg:flex">
